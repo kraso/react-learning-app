@@ -1,0 +1,407 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {
+  Atom,
+  BookOpen,
+  CheckCircle2,
+  CircleCheck,
+  FileText,
+  FlaskConical,
+  Loader2,
+  Lock,
+  PenLine,
+  Search,
+  ArrowLeft,
+  Moon,
+  Sun,
+  LogOut,
+  Home,
+} from 'lucide-react';
+import courseData from './courseData.json';
+import { fetchMarkdownContent } from './utils/contentLoader';
+import ProgressBar from './components/ProgressBar';
+import LandingPage from './components/landing/LandingPage';
+import { useTheme } from './hooks/useTheme';
+import { AuthProvider, useAuth, loadUserProgress, saveUserProgress } from './hooks/useAuth';
+
+const CATEGORIES = ['lecciones', 'ejercicios', 'pruebas'];
+
+const CATEGORY_META = {
+  lecciones: { label: 'Lecciones', Icon: BookOpen, className: 'category-icon--lecciones' },
+  ejercicios: { label: 'Ejercicios', Icon: PenLine, className: 'category-icon--ejercicios' },
+  pruebas: { label: 'Pruebas', Icon: FlaskConical, className: 'category-icon--pruebas' },
+};
+
+const LEVEL_NUMBERS = Object.fromEntries(
+  Object.keys(courseData).map((key, index) => [key, index + 1]),
+);
+
+const findFileByPath = (path) => {
+  for (const level of Object.values(courseData)) {
+    for (const category of CATEGORIES) {
+      const file = level[category]?.find((item) => item.path === path);
+      if (file) return file;
+    }
+  }
+  return null;
+};
+
+const getLevelKeyFromPath = (path) =>
+  Object.keys(courseData).find((key) => path.includes(key));
+
+const AppsInner = () => {
+  const { theme, toggleTheme } = useTheme();
+  const { user, logout, loading: authLoading } = useAuth();
+  const [currentView, setCurrentView] = useState('landing');
+  const [currentFile, setCurrentFile] = useState(null);
+  const [content, setContent] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [completedItems, setCompletedItems] = useState([]);
+  const [currentLevelName, setCurrentLevelName] = useState(Object.keys(courseData)[0]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Load progress when user changes
+  useEffect(() => {
+    if (authLoading) return;
+    const userId = user?.id || null;
+    loadUserProgress(userId).then((saved) => {
+      setCompletedItems(saved);
+    });
+  }, [user, authLoading]);
+
+  // Load first lesson on mount
+  useEffect(() => {
+    const firstLesson = courseData[currentLevelName].lecciones[0];
+    if (firstLesson) setCurrentFile(firstLesson.path);
+  }, []);
+
+  useEffect(() => {
+    if (currentFile) {
+      const loadContent = async () => {
+        setIsLoading(true);
+        const data = await fetchMarkdownContent(currentFile);
+        setContent(data);
+        setIsLoading(false);
+      };
+      loadContent();
+    }
+  }, [currentFile]);
+
+  useEffect(() => {
+    if (authLoading) return;
+    const userId = user?.id || null;
+    saveUserProgress(userId, completedItems);
+  }, [completedItems, user, authLoading]);
+
+  const filteredCourseData = useMemo(() => {
+    return Object.entries(courseData).filter(([levelName, data]) => {
+      const term = searchTerm.toLowerCase();
+      const matchesLevel = levelName.toLowerCase().includes(term)
+        || data.title.toLowerCase().includes(term);
+      const matchesLecciones = data.lecciones.some((l) => l.title.toLowerCase().includes(term));
+      const matchesEjercicios = data.ejercicios?.some((e) => e.title.toLowerCase().includes(term));
+      return matchesLevel || matchesLecciones || matchesEjercicios;
+    });
+  }, [searchTerm]);
+
+  const isLevelLessonsComplete = (levelName) => {
+    const lecciones = courseData[levelName].lecciones;
+    return lecciones.every((l) => completedItems.includes(l.id));
+  };
+
+  const isCategoryUnlocked = (levelName, category) => {
+    if (category === 'lecciones') return true;
+    return isLevelLessonsComplete(levelName);
+  };
+
+  const handleFileClick = (path) => {
+    setCurrentFile(path);
+    const levelKey = getLevelKeyFromPath(path);
+    if (levelKey) setCurrentLevelName(levelKey);
+  };
+
+  const markAsComplete = () => {
+    const file = findFileByPath(currentFile);
+    if (file && !completedItems.includes(file.id)) {
+      setCompletedItems([...completedItems, file.id]);
+    }
+  };
+
+  const currentFileId = findFileByPath(currentFile)?.id;
+  const isCompleted = currentFileId && completedItems.includes(currentFileId);
+  const currentLevelTitle = courseData[currentLevelName]?.title ?? '';
+
+  const Sidebar = ({ onBackToLanding }) => (
+    <aside className="sidebar">
+      <button className="back-to-landing" onClick={onBackToLanding}>
+        <ArrowLeft size={16} />
+        Volver al Inicio
+      </button>
+      <div className="sidebar-brand">
+        <div className="brand-icon">
+          <Atom size={22} strokeWidth={2.5} />
+        </div>
+        <div>
+          <h1 className="main-title">React Course</h1>
+          <p className="brand-subtitle">Aprende paso a paso</p>
+        </div>
+      </div>
+
+      <div  className="search-container">
+        <Search className="search-icon" size={16} />
+        <input
+          id="search-box"
+          type="text"
+          placeholder="Buscar lección..."
+          className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      {filteredCourseData.map(([levelName, levelData]) => {
+        const isCurrentLevel = levelName === currentLevelName;
+
+        return (
+          <div key={levelName} className={`level-section ${isCurrentLevel ? 'active' : ''}`}>
+            <div className="level-header">
+              <h2 className="level-title">
+                <span className="level-badge">{LEVEL_NUMBERS[levelName]}</span>
+                {levelData.title}
+              </h2>
+              <ProgressBar
+                items={levelData.lecciones}
+                completedItems={completedItems}
+              />
+            </div>
+
+            {CATEGORIES.map((category) => {
+              const files = levelData[category] ?? [];
+              const unlocked = isCategoryUnlocked(levelName, category);
+              const { label, Icon, className } = CATEGORY_META[category];
+
+              return (
+                <div key={category} className={`category-group ${!unlocked ? 'locked' : ''}`}>
+                  <h3 className="category-title">
+                    <Icon size={14} className={`category-icon ${className}`} />
+                    {label}
+                    {!unlocked && <Lock className="lock-icon" size={13} />}
+                  </h3>
+                  <ul className="file-list">
+                    {files.map((file) => {
+                      const done = completedItems.includes(file.id);
+                      const active = currentFile === file.path;
+
+                      return (
+                        <li
+                          key={file.id}
+                          className={active ? 'active-file' : ''}
+                          onClick={() => handleFileClick(file.path)}
+                        >
+                          {done ? (
+                            <CircleCheck size={14} className="check-icon" />
+                          ) : (
+                            <FileText size={14} className="file-item-icon" />
+                          )}
+                          <span className="file-item-title">{file.title}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </aside>
+  );
+
+  const ContentViewer = () => {
+    if (!currentFile) {
+      return (
+        <div className="content-empty">
+          <BookOpen className="content-empty-icon" size={48} strokeWidth={1.25} />
+          <h2>Bienvenido al curso</h2>
+          <p>Selecciona una lección en el panel lateral para comenzar tu aprendizaje.</p>
+        </div>
+      );
+    }
+
+    const pageTitle = currentFile.split('/').pop().replace('.md', '').replace(/_/g, ' ');
+
+    return (
+      <article className="content-area">
+        <header className="content-header">
+          <div>
+            <div className="content-breadcrumb">
+              <Atom size={12} />
+              {currentLevelTitle}
+            </div>
+            <h2 className="content-title">{pageTitle}</h2>
+          </div>
+          {content && (
+            <button
+              onClick={markAsComplete}
+              className={`btn-complete ${isCompleted ? 'completed' : ''}`}
+              disabled={isLoading || isCompleted}
+            >
+              {isCompleted ? (
+                <>
+                  <CheckCircle2 size={16} />
+                  Completado
+                </>
+              ) : (
+                <>
+                  <CircleCheck size={16} />
+                  Actualizar progreso
+                </>
+              )}
+            </button>
+          )}
+        </header>
+
+        <div className="markdown-body">
+          {isLoading ? (
+            <div className="loading-spinner">
+              <Loader2 size={20} className="spin" />
+              Cargando contenido...
+            </div>
+          ) : (
+            <ReactMarkdown
+              components={{
+                code({ inline, className, children, ...props }) {
+                  const match = /language-(\w+)/.exec(className || '');
+                  const codeString = String(children).replace(/\n$/, '');
+
+                  if (inline) {
+                    return <code className="inline-code">{codeString}</code>;
+                  }
+
+                  return (
+                    <SyntaxHighlighter
+                      style={vscDarkPlus}
+                      language={match ? match[1] : 'javascript'}
+                      PreTag="div"
+                      className="code-block"
+                      {...props}
+                    >
+                      {codeString}
+                    </SyntaxHighlighter>
+                  );
+                },
+              }}
+            >
+              {content}
+            </ReactMarkdown>
+          )}
+        </div>
+      </article>
+    );
+  };
+
+  const startCourse = () => {
+    setCurrentView('course');
+    if (!currentFile) {
+      const firstLesson = courseData[currentLevelName]?.lecciones[0];
+      if (firstLesson) setCurrentFile(firstLesson.path);
+    }
+  };
+
+  const goToLanding = () => setCurrentView('landing');
+
+  const CourseNavbar = () => {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
+    const ThemeIcon = theme === 'dark' ? Sun : Moon;
+
+    useEffect(() => {
+      if (!menuOpen) return;
+      const handleClick = (e) => {
+        if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+      };
+      document.addEventListener('mousedown', handleClick);
+      return () => document.removeEventListener('mousedown', handleClick);
+    }, [menuOpen]);
+
+    return (
+      <nav className="course-navbar">
+        <button className="course-nav-btn" onClick={goToLanding} title="Volver al Inicio">
+          <Home size={16} />
+          <span>Inicio</span>
+        </button>
+        <div className="course-nav-brand">
+          <Atom size={16} strokeWidth={2.5} />
+          <span>React Course</span>
+        </div>
+        <div className="course-nav-actions">
+          <button className="course-nav-btn course-nav-btn--icon" onClick={toggleTheme} title="Cambiar tema">
+            <ThemeIcon size={16} />
+          </button>
+          {user && (
+            <div className="course-nav-user-wrap" ref={menuRef}>
+              <button
+                className="course-nav-user"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <div className="course-nav-avatar">{user.name.charAt(0).toUpperCase()}</div>
+                <span className="course-nav-username">{user.name}</span>
+                <svg className={`course-nav-chevron ${menuOpen ? 'open' : ''}`} width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              {menuOpen && (
+                <div className="course-nav-dropdown">
+                  <div className="course-nav-dropdown-header">
+                    <div className="course-nav-dropdown-avatar">{user.name.charAt(0).toUpperCase()}</div>
+                    <div>
+                      <div className="course-nav-dropdown-name">{user.name}</div>
+                      <div className="course-nav-dropdown-email">{user.email}</div>
+                    </div>
+                  </div>
+                  <div className="course-nav-dropdown-divider" />
+                  <button className="course-nav-dropdown-item" onClick={() => { setMenuOpen(false); logout(); }}>
+                    <LogOut size={15} />
+                    Cerrar sesión
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </nav>
+    );
+  };
+
+  if (currentView === 'landing') {
+    return (
+      <LandingPage
+        onStartCourse={startCourse}
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
+
+  return (
+    <div className="app-container">
+      <CourseNavbar />
+      <div className="app-body">
+        <Sidebar onBackToLanding={goToLanding} />
+        <main className="content-panel">
+          <ContentViewer />
+        </main>
+      </div>
+    </div>
+  );
+};
+
+const Apps = () => (
+  <AuthProvider>
+    <AppsInner />
+  </AuthProvider>
+);
+
+export default Apps;

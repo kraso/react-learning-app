@@ -1,0 +1,270 @@
+[
+  {
+    "id": "nivel_1_introduccion",
+    "title": "1 Introduccion",
+    "categories": {
+      "lecciones": [
+        {
+          "id": "leccion_1_1__qu__es_react",
+          "title": "Leccion 1.1 ¿Qué es React",
+          "path": "/docs/Nivel_1_Introduccion/Lecciones/Leccion_1.1_¿Qué_es_React.md"
+        },
+        {
+          "id": "leccion_1_2_ventajas_react",
+          "title": "Leccion 1.2 Ventajas React",
+          "path": "/docs/Nivel_1_Introduccion/Lecciones/Leccion_1.2_Ventajas_React.md"
+        },
+        {
+          "id": "leccion_1_3_configuraci_n_entorno",
+          "title": "Leccion 1.3 Configuración Entorno",
+          "path": "/docs/Nivel_1_Introduccion/Lecciones/Leccion_1.3_Configuración_Entorno.md"
+        },
+        {
+          "id": "leccion_1_4_primer_componente",
+          "title": "Leccion 1.4 Primer Componente",
+          "path": "/docs/Nivel_1_Introduccion/Lecciones/Leccion_1.4_Primer_Componente.md"
+        },
+        {
+          "id": "leccion_1_5_jsx_b_sico",
+          "title": "Leccion 1.5 JSX Básico",
+          "path": "/docs/Nivel_1_Introduccion/Lecciones/Leccion_1.5_JSX_Básico.md"
+        }
+      ],
+      "ejercicios": [
+        {
+          "id": "ejercicio1_1",
+          "title": "Ejercicio1 1",
+          "path": "/docs/Nivel_1_Introduccion/Ejercicios/Ejercicio1_1.md"
+        },
+        {
+          "id": "ejercicio1_2",
+          "title": "Ejercicio1 2",
+          "path": "/docs/Nivel_1_Introduccion/Ejercicios/Ejercicio1_2.md"
+        },
+        {
+          "id": "ejercicio1_3",
+          "title": "Ejercicio1 3",
+          "path": "/docs/Nivel_1_Introduccion/Ejercicios/Ejercicio1_3.md"
+        }
+      ],
+      "pruebas": [
+        {
+          "id": "prueba1_1",
+          "title": "Prueba1 1",
+          "path": "/docs/Nivel_1_Introduccion/Pruebas/Prueba1_1.md"
+        },
+        {
+          "id": "prueba1_2",
+          "title": "Prueba1 2",
+          "path": "/docs/Nivel_1_Introduccion/Pruebas/Prueba1_2.md"
+        }
+      ]
+    }
+  },
+  {
+    "id": "nivel_2_conceptos_fundamentales",
+    "title": "2 Conceptos Fundamentales",
+    "categories": {
+      "lecciones": [
+        {
+          "id": "leccion_2_1_componentes_y_props",
+          "title": "Leccion 2.1 Componentes y Props",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Lecciones/Leccion_2.1_Componentes_y_Props.md"
+        },
+        {
+          "id": "leccion_2_2_estados_y_hooks",
+          "title": "Leccion 2.2 Estados y Hooks",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Lecciones/Leccion_2.2_Estados_y_Hooks.md"
+        },
+        {
+          "id": "leccion_2_3_eventos",
+          "title": "Leccion 2.3 Eventos",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Lecciones/Leccion_2.3_Eventos.md"
+        },
+        {
+          "id": "leccion_2_4_listas_y_claves",
+          "title": "Leccion 2.4 Listas y Claves",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Lecciones/Leccion_2.4_Listas_y_Claves.md"
+        },
+        {
+          "id": "leccion_2_5_formularios",
+          "title": "Leccion 2.5 Formularios",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Lecciones/Leccion_2.5_Formularios.md"
+        }
+      ],
+      "ejercicios": [
+        {
+          "id": "ejercicio2_1",
+          "title": "Ejercicio2 1",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Ejercicios/Ejercicio2_1.md"
+        },
+        {
+          "id": "ejercicio2_2",
+          "title": "Ejercicio2 2",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Ejercicios/Ejercicio2_2.md"
+        },
+        {
+          "id": "ejercicio2_3",
+          "title": "Ejercicio2 3",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Ejercicios/Ejercicio2_3.md"
+        },
+        {
+          "id": "ejercicio2_4",
+          "title": "Ejercicio2 4",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Ejercicios/Ejercicio2_4.md"
+        },
+        {
+          "id": "ejercicio2_5",
+          "title": "Ejercicio2 5",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Ejercicios/Ejercicio2_5.md"
+        }
+      ],
+      "pruebas": [
+        {
+          "id": "prueba2_1",
+          "title": "Prueba2 1",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Pruebas/Prueba2_1.md"
+        },
+        {
+          "id": "prueba2_2",
+          "title": "Prueba2 2",
+          "path": "/docs/Nivel_2_Conceptos_Fundamentales/Pruebas/Prueba2_2.md"
+        }
+      ]
+    }
+  },
+  {
+    "id": "nivel_3_componentes_avanzados",
+    "title": "3 Componentes Avanzados",
+    "categories": {
+      "lecciones": [
+        {
+          "id": "leccion_3_1_hooks_personalizados",
+          "title": "Leccion 3.1 Hooks Personalizados",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Lecciones/Leccion_3.1_Hooks_Personalizados.md"
+        },
+        {
+          "id": "leccion_3_2_context_api",
+          "title": "Leccion 3.2 Context API",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Lecciones/Leccion_3.2_Context_API.md"
+        },
+        {
+          "id": "leccion_3_3_manejo_de_efectos",
+          "title": "Leccion 3.3 Manejo de Efectos",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Lecciones/Leccion_3.3_Manejo_de_Efectos.md"
+        },
+        {
+          "id": "leccion_3_4_optimizacion_rendimiento",
+          "title": "Leccion 3.4 Optimizacion Rendimiento",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Lecciones/Leccion_3.4_Optimizacion_Rendimiento.md"
+        },
+        {
+          "id": "leccion_3_5_manejo_errores",
+          "title": "Leccion 3.5 Manejo Errores",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Lecciones/Leccion_3.5_Manejo_Errores.md"
+        }
+      ],
+      "ejercicios": [
+        {
+          "id": "ejercicio3_1",
+          "title": "Ejercicio3 1",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Ejercicios/Ejercicio3_1.md"
+        },
+        {
+          "id": "ejercicio3_2",
+          "title": "Ejercicio3 2",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Ejercicios/Ejercicio3_2.md"
+        },
+        {
+          "id": "ejercicio3_3",
+          "title": "Ejercicio3 3",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Ejercicios/Ejercicio3_3.md"
+        },
+        {
+          "id": "ejercicio3_4",
+          "title": "Ejercicio3 4",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Ejercicios/Ejercicio3_4.md"
+        },
+        {
+          "id": "ejercicio3_5",
+          "title": "Ejercicio3 5",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Ejercicios/Ejercicio3_5.md"
+        }
+      ],
+      "pruebas": [
+        {
+          "id": "prueba3_1",
+          "title": "Prueba3 1",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Pruebas/Prueba3_1.md"
+        },
+        {
+          "id": "prueba3_2",
+          "title": "Prueba3 2",
+          "path": "/docs/Nivel_3_Componentes_Avanzados/Pruebas/Prueba3_2.md"
+        }
+      ]
+    }
+  },
+  {
+    "id": "nivel_4_aplicaciones_complejas",
+    "title": "4 Aplicaciones Complejas",
+    "categories": {
+      "lecciones": [
+        {
+          "id": "leccion_4_1_rutas_y_navegacion",
+          "title": "Leccion 4.1 Rutas y Navegacion",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Lecciones/Leccion_4.1_Rutas_y_Navegacion.md"
+        },
+        {
+          "id": "leccion_4_2_administracion_estado",
+          "title": "Leccion 4.2 Administracion Estado",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Lecciones/Leccion_4.2_Administracion_Estado.md"
+        },
+        {
+          "id": "leccion_4_3_testing_react",
+          "title": "Leccion 4.3 Testing React",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Lecciones/Leccion_4.3_Testing_React.md"
+        },
+        {
+          "id": "leccion_4_4_deploy_aplicaciones",
+          "title": "Leccion 4.4 Deploy Aplicaciones",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Lecciones/Leccion_4.4_Deploy_Aplicaciones.md"
+        }
+      ],
+      "ejercicios": [
+        {
+          "id": "ejercicio4_1",
+          "title": "Ejercicio4 1",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Ejercicios/Ejercicio4_1.md"
+        },
+        {
+          "id": "ejercicio4_2",
+          "title": "Ejercicio4 2",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Ejercicios/Ejercicio4_2.md"
+        },
+        {
+          "id": "ejercicio4_3",
+          "title": "Ejercicio4 3",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Ejercicios/Ejercicio4_3.md"
+        },
+        {
+          "id": "ejercicio4_4",
+          "title": "Ejercicio4 4",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Ejercicios/Ejercicio4_4.md"
+        }
+      ],
+      "pruebas": [
+        {
+          "id": "prueba4_1",
+          "title": "Prueba4 1",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Pruebas/Prueba4_1.md"
+        },
+        {
+          "id": "prueba4_2",
+          "title": "Prueba4 2",
+          "path": "/docs/Nivel_4_Aplicaciones_Complejas/Pruebas/Prueba4_2.md"
+        }
+      ]
+    }
+  }
+]
