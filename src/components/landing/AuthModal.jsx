@@ -74,8 +74,17 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
     const result = isRegister ? await register(form) : await login(form);
 
     if (result.ok) {
-      setStatus({ type: 'success', message: isRegister ? 'Cuenta creada exitosamente' : 'Inicio de sesión exitoso' });
-      setTimeout(onClose, 800);
+      if (isRegister) {
+        setStatus({ type: 'success', message: 'Cuenta creada. Revisa tu email para confirmar tu cuenta antes de iniciar sesión.' });
+        setTimeout(() => {
+          setMode(MODES.LOGIN);
+          setForm((prev) => ({ ...prev, password: '' }));
+          setStatus({ type: null, message: '' });
+        }, 3000);
+      } else {
+        setStatus({ type: 'success', message: 'Inicio de sesión exitoso' });
+        setTimeout(onClose, 800);
+      }
     } else {
       setStatus({ type: 'error', message: result.error });
     }

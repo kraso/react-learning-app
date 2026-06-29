@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -351,14 +351,14 @@ const AppsInner = () => {
           <button className="course-nav-btn course-nav-btn--icon" onClick={toggleTheme} title="Cambiar tema">
             <ThemeIcon size={16} />
           </button>
-          {user && (
+          {user ? (
             <div className="course-nav-user-wrap" ref={menuRef}>
               <button
                 className="course-nav-user"
                 onClick={() => setMenuOpen(!menuOpen)}
               >
-                <div className="course-nav-avatar">{user.name.charAt(0).toUpperCase()}</div>
-                <span className="course-nav-username">{user.name}</span>
+                <div className="course-nav-avatar">{user.name?.charAt(0)?.toUpperCase() || '?'}</div>
+                <span className="course-nav-username">{user.name || user.email || 'Usuario'}</span>
                 <svg className={`course-nav-chevron ${menuOpen ? 'open' : ''}`} width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -366,10 +366,10 @@ const AppsInner = () => {
               {menuOpen && (
                 <div className="course-nav-dropdown">
                   <div className="course-nav-dropdown-header">
-                    <div className="course-nav-dropdown-avatar">{user.name.charAt(0).toUpperCase()}</div>
+                    <div className="course-nav-dropdown-avatar">{user.name?.charAt(0)?.toUpperCase() || '?'}</div>
                     <div>
-                      <div className="course-nav-dropdown-name">{user.name}</div>
-                      <div className="course-nav-dropdown-email">{user.email}</div>
+                      <div className="course-nav-dropdown-name">{user.name || 'Usuario'}</div>
+                      <div className="course-nav-dropdown-email">{user.email || ''}</div>
                     </div>
                   </div>
                   <div className="course-nav-dropdown-divider" />
@@ -380,6 +380,10 @@ const AppsInner = () => {
                 </div>
               )}
             </div>
+          ) : (
+            <button className="course-nav-btn" onClick={goToLanding}>
+              Iniciar sesión
+            </button>
           )}
         </div>
       </nav>
