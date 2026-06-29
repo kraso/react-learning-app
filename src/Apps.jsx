@@ -25,6 +25,7 @@ import ProgressBar from './components/ProgressBar';
 import LandingPage from './components/landing/LandingPage';
 import { useTheme } from './hooks/useTheme';
 import { AuthProvider, useAuth, loadUserProgress, saveUserProgress } from './hooks/useAuth';
+import ExerciseViewer from './components/ExerciseViewer';
 
 const CATEGORIES = ['lecciones', 'ejercicios', 'pruebas'];
 
@@ -231,6 +232,10 @@ const AppsInner = () => {
     }
 
     const pageTitle = currentFile.split('/').pop().replace('.md', '').replace(/_/g, ' ');
+    const currentFileId = findFileByPath(currentFile)?.id;
+    const isExerciseFile = currentFile.includes('Ejercicios') || currentFile.includes('Ejercicio');
+    const isTestFile = currentFile.includes('Pruebas') || currentFile.includes('Prueba');
+    const isInteractive = isExerciseFile || isTestFile;
 
     return (
       <article className="content-area">
@@ -242,62 +247,68 @@ const AppsInner = () => {
             </div>
             <h2 className="content-title">{pageTitle}</h2>
           </div>
-          {content && (
-            <button
-              onClick={markAsComplete}
-              className={`btn-complete ${isCompleted ? 'completed' : ''}`}
-              disabled={isLoading || isCompleted}
-            >
-              {isCompleted ? (
-                <>
-                  <CheckCircle2 size={16} />
-                  Completado
-                </>
-              ) : (
-                <>
-                  <CircleCheck size={16} />
-                  Actualizar progreso
-                </>
-              )}
-            </button>
-          )}
+          <button
+            onClick={markAsComplete}
+            className={`btn-complete ${isCompleted ? 'completed' : ''}`}
+            disabled={isCompleted}
+          >
+            {isCompleted ? (
+              <>
+                <CheckCircle2 size={16} />
+                Completado
+              </>
+            ) : (
+              <>
+                <CircleCheck size={16} />
+                Marcar como completado
+              </>
+            )}
+          </button>
         </header>
 
-        <div className="markdown-body">
-          {isLoading ? (
-            <div className="loading-spinner">
-              <Loader2 size={20} className="spin" />
-              Cargando contenido...
-            </div>
-          ) : (
-            <ReactMarkdown
-              components={{
-                code({ inline, className, children, ...props }) {
-                  const match = /language-(\w+)/.exec(className || '');
-                  const codeString = String(children).replace(/\n$/, '');
+        {isInteractive ? (
+          <ExerciseViewer
+            path={currentFile}
+            fileId={currentFileId}
+            isExercise={isExerciseFile}
+          />
+        ) : (
+          <div className="markdown-body">
+            {isLoading ? (
+              <div className="loading-spinner">
+                <Loader2 size={20} className="spin" />
+                Cargando contenido...
+              </div>
+            ) : (
+              <ReactMarkdown
+                components={{
+                  code({ inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    const codeString = String(children).replace(/\n$/, '');
 
-                  if (inline) {
-                    return <code className="inline-code">{codeString}</code>;
-                  }
+                    if (inline) {
+                      return <code className="inline-code">{codeString}</code>;
+                    }
 
-                  return (
-                    <SyntaxHighlighter
-                      style={vscDarkPlus}
-                      language={match ? match[1] : 'javascript'}
-                      PreTag="div"
-                      className="code-block"
-                      {...props}
-                    >
-                      {codeString}
-                    </SyntaxHighlighter>
-                  );
-                },
-              }}
-            >
-              {content}
-            </ReactMarkdown>
-          )}
-        </div>
+                    return (
+                      <SyntaxHighlighter
+                        style={vscDarkPlus}
+                        language={match ? match[1] : 'javascript'}
+                        PreTag="div"
+                        className="code-block"
+                        {...props}
+                      >
+                        {codeString}
+                      </SyntaxHighlighter>
+                    );
+                  },
+                }}
+              >
+                {content}
+              </ReactMarkdown>
+            )}
+          </div>
+        )}
       </article>
     );
   };

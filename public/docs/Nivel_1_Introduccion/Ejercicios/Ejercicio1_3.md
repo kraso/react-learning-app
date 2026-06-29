@@ -1,24 +1,30 @@
-```markdown
-## Ejercicio 3: Componente con props
+## Componente con props
 
-**Instrucciones:**
-Crea un componente llamado `Saludo` que acepte una prop `nombre` y muestre un saludo personalizado.
+**Enunciado:**
+Crea un componente funcional llamado `Saludo` que acepte una prop llamada `nombre` y muestre un saludo personalizado en un encabezado. El componente debe recibir la prop y usarla dentro del JSX.
 
 **Requisitos:**
-1. El componente debe aceptar una prop
-2. Debe mostrar el nombre recibido en una frase de saludo
-3. Debe usar la prop dentro del JSX
+1. El componente debe llamarse `Saludo`
+2. Debe aceptar una prop llamada `nombre`
+3. Debe renderizar un saludo que incluya el nombre recibido (ej: "Hola, Juan!")
+4. Debe exportarse como exportación por defecto
 
-**Ejemplo de solución:**
+**Pistas:**
+- Las props se reciben como parámetro en la función del componente
+- Puedes acceder a las props como `props.nombre` o usando destructuring `{ nombre }`
+- Para insertar una variable en JSX se usan llaves `{}` dentro de las etiquetas
+
+**Solución:**
 ```jsx
 import React from 'react';
 
-function Saludo(props) {
-return (
+function Saludo({ nombre }) {
+  return (
     <div>
-    <h1>Hola, ${props.nombre}!</h1>
+      <h1>Hola, {nombre}!</h1>
     </div>
-);
+  );
 }
 
 export default Saludo;
+```
