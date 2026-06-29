@@ -1,6 +1,6 @@
 CREATE TABLE user_progress (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE,
   completed_items JSONB DEFAULT '[]',
   updated_at TIMESTAMPTZ DEFAULT now()
 );
