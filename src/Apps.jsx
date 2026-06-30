@@ -28,6 +28,7 @@ import { useTheme } from './hooks/useTheme';
 import { AuthProvider, useAuth, loadUserProgress, saveUserProgress } from './hooks/useAuth';
 import ExerciseViewer from './components/ExerciseViewer';
 import ProfileModal from './components/ProfileModal';
+import ResetPasswordModal from './components/ResetPasswordModal';
 import LegalPage from './components/LegalPage';
 
 const CATEGORIES = ['lecciones', 'ejercicios', 'pruebas'];
@@ -57,7 +58,7 @@ const getLevelKeyFromPath = (path) =>
 
 const AppsInner = () => {
   const { theme, toggleTheme } = useTheme();
-  const { user, logout, loading: authLoading } = useAuth();
+  const { user, logout, loading: authLoading, isRecoveringPassword } = useAuth();
   const [currentView, setCurrentView] = useState('landing');
   const [currentFile, setCurrentFile] = useState(null);
   const [content, setContent] = useState('');
@@ -462,12 +463,15 @@ const AppsInner = () => {
 
   if (currentView === 'landing') {
     return (
-      <LandingPage
-        onStartCourse={startCourse}
-        theme={theme}
-        toggleTheme={toggleTheme}
-        onGoToLegal={goToLegal}
-      />
+      <>
+        <LandingPage
+          onStartCourse={startCourse}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          onGoToLegal={goToLegal}
+        />
+        {isRecoveringPassword && <ResetPasswordModal />}
+      </>
     );
   }
 
@@ -482,6 +486,7 @@ const AppsInner = () => {
         <LevelNav />
       </div>
       <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
+      {isRecoveringPassword && <ResetPasswordModal />}
     </div>
   );
 };

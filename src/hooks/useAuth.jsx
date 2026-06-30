@@ -6,6 +6,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isRecoveringPassword, setIsRecoveringPassword] = useState(false);
 
   const loadProfile = useCallback(async (userId) => {
     if (!userId) return null;
@@ -31,7 +32,11 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsRecoveringPassword(true);
+        return;
+      }
       if (session?.user) {
         const profile = await loadProfile(session.user.id);
         setUser({
@@ -94,12 +99,25 @@ export function AuthProvider({ children }) {
         redirectTo: `${window.location.origin}/`,
       });
       if (error) {
-        const msg = error.message || error.error_description || 'Error al enviar el enlace de restablecimiento';
+        console.error('resetPassword error:', error);
+        const msg = error.message || error.error_description || JSON.stringify(error) || 'Error al enviar el enlace de restablecimiento';
         return { ok: false, error: msg };
       }
       return { ok: true };
     } catch (err) {
+      console.error('resetPassword exception:', err);
       return { ok: false, error: err.message || 'Error de conexión al enviar el enlace' };
+    }
+  }, []);
+
+  const updatePassword = useCallback(async (newPassword) => {
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) return { ok: false, error: error.message };
+      setIsRecoveringPassword(false);
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: err.message || 'Error al actualizar la contraseña' };
     }
   }, []);
 
@@ -108,7 +126,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile, resetPassword }}>
+    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile, resetPassword, updatePassword, isRecoveringPassword, setIsRecoveringPassword }}>
       {children}
     </AuthContext.Provider>
   );
