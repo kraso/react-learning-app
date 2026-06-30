@@ -102,7 +102,7 @@ const AppsInner = () => {
     if (authLoading || !progressLoaded) return;
     const userId = user?.id || null;
     saveUserProgress(userId, completedItems);
-  }, [completedItems, user, authLoading, progressLoaded]);
+  }, [completedItems, authLoading, progressLoaded]);
 
   const filteredCourseData = useMemo(() => {
     return Object.entries(courseData).filter(([levelName, data]) => {
