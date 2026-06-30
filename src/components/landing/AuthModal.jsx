@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Mail, Lock, User, ArrowRight, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { X, Mail, Lock, User, ArrowRight, Loader2, CheckCircle2, AlertCircle, KeyRound } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import './AuthModal.css';
 
-const MODES = { LOGIN: 'login', REGISTER: 'register' };
+const MODES = { LOGIN: 'login', REGISTER: 'register', FORGOT: 'forgot' };
 
 export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }) {
-  const { login, register } = useAuth();
+  const { login, register, resetPassword } = useAuth();
   const [mode, setMode] = useState(initialMode);
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [status, setStatus] = useState({ type: null, message: '' });
@@ -40,6 +40,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
   if (!isOpen) return null;
 
   const isRegister = mode === MODES.REGISTER;
+  const isForgot = mode === MODES.FORGOT;
 
   const handleChange = (field) => (e) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -47,14 +48,15 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
   };
 
   const validate = () => {
-    if (isRegister && !form.name.trim()) {
-      return 'El nombre es obligatorio';
-    }
     if (!form.email.trim()) {
       return 'El email es obligatorio';
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       return 'Ingresa un email válido';
+    }
+    if (isForgot) return null;
+    if (isRegister && !form.name.trim()) {
+      return 'El nombre es obligatorio';
     }
     if (form.password.length < 6) {
       return 'La contraseña debe tener al menos 6 caracteres';
@@ -71,6 +73,18 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
     }
 
     setLoading(true);
+
+    if (isForgot) {
+      const result = await resetPassword(form.email);
+      setLoading(false);
+      if (result.ok) {
+        setStatus({ type: 'success', message: 'Revisa tu email para restablecer tu contraseña.' });
+      } else {
+        setStatus({ type: 'error', message: result.error });
+      }
+      return;
+    }
+
     const result = isRegister ? await register(form) : await login(form);
 
     if (result.ok) {
@@ -100,6 +114,16 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
     setStatus({ type: null, message: '' });
   };
 
+  const goToForgot = () => {
+    setMode(MODES.FORGOT);
+    setStatus({ type: null, message: '' });
+  };
+
+  const backToLogin = () => {
+    setMode(MODES.LOGIN);
+    setStatus({ type: null, message: '' });
+  };
+
   return (
     <div className="auth-overlay" ref={overlayRef} onClick={handleOverlayClick}>
       <div className="auth-modal">
@@ -109,37 +133,41 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
 
         <div className="auth-header">
           <div className="auth-header-icon">
-            {isRegister ? <User size={22} /> : <Lock size={22} />}
+            {isForgot ? <KeyRound size={22} /> : isRegister ? <User size={22} /> : <Lock size={22} />}
           </div>
-          <h2 className="auth-title">{isRegister ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
+          <h2 className="auth-title">
+            {isForgot ? 'Restablecer Contraseña' : isRegister ? 'Crear Cuenta' : 'Iniciar Sesión'}
+          </h2>
           <p className="auth-subtitle">
-            {isRegister
-              ? 'Regístrate para guardar tu progreso del curso'
-              : 'Bienvenido de vuelta, continúa aprendiendo'}
+            {isForgot
+              ? 'Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña'
+              : isRegister
+                ? 'Regístrate para guardar tu progreso del curso'
+                : 'Bienvenido de vuelta, continúa aprendiendo'}
           </p>
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
-          {isRegister && (
+          {(isRegister || isForgot) && (
             <div className="auth-field">
-              <label className="auth-label" htmlFor="auth-name">Nombre</label>
+              <label className="auth-label" htmlFor="auth-email-reg">Email</label>
               <div className="auth-input-wrap">
-                <User size={16} className="auth-input-icon" />
+                <Mail size={16} className="auth-input-icon" />
                 <input
-                  id="auth-name"
-                  ref={inputRef}
-                  type="text"
+                  id="auth-email-reg"
+                  ref={isForgot ? inputRef : undefined}
+                  type="email"
                   className="auth-input"
-                  placeholder="Tu nombre"
-                  value={form.name}
-                  onChange={handleChange('name')}
-                  autoComplete="name"
+                  placeholder="tu@email.com"
+                  value={form.email}
+                  onChange={handleChange('email')}
+                  autoComplete="email"
                 />
               </div>
             </div>
           )}
 
-          {!isRegister && (
+          {!isRegister && !isForgot && (
             <div className="auth-field">
               <label className="auth-label" htmlFor="auth-email">Email</label>
               <div className="auth-input-wrap">
@@ -160,48 +188,56 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
 
           {isRegister && (
             <div className="auth-field">
-              <label className="auth-label" htmlFor="auth-email-reg">Email</label>
+              <label className="auth-label" htmlFor="auth-name">Nombre</label>
               <div className="auth-input-wrap">
-                <Mail size={16} className="auth-input-icon" />
+                <User size={16} className="auth-input-icon" />
                 <input
-                  id="auth-email-reg"
-                  type="email"
+                  id="auth-name"
+                  type="text"
                   className="auth-input"
-                  placeholder="tu@email.com"
-                  value={form.email}
-                  onChange={handleChange('email')}
-                  autoComplete="email"
+                  placeholder="Tu nombre"
+                  value={form.name}
+                  onChange={handleChange('name')}
+                  autoComplete="name"
                 />
               </div>
             </div>
           )}
 
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="auth-password">Contraseña</label>
-            <div className="auth-input-wrap">
-              <Lock size={16} className="auth-input-icon" />
-              <input
-                id="auth-password"
-                type={showPassword ? 'text' : 'password'}
-                className="auth-input"
-                placeholder="••••••••"
-                value={form.password}
-                onChange={handleChange('password')}
-                autoComplete={isRegister ? 'new-password' : 'current-password'}
-              />
-              <button
-                type="button"
-                className="auth-password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-              >
-                {showPassword ? 'Ocultar' : 'Ver'}
-              </button>
+          {!isForgot && (
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="auth-password">Contraseña</label>
+              <div className="auth-input-wrap">
+                <Lock size={16} className="auth-input-icon" />
+                <input
+                  id="auth-password"
+                  type={showPassword ? 'text' : 'password'}
+                  className="auth-input"
+                  placeholder="••••••••"
+                  value={form.password}
+                  onChange={handleChange('password')}
+                  autoComplete={isRegister ? 'new-password' : 'current-password'}
+                />
+                <button
+                  type="button"
+                  className="auth-password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                >
+                  {showPassword ? 'Ocultar' : 'Ver'}
+                </button>
+              </div>
+              {isRegister && (
+                <span className="auth-hint">Mínimo 6 caracteres</span>
+              )}
             </div>
-            {isRegister && (
-              <span className="auth-hint">Mínimo 6 caracteres</span>
-            )}
-          </div>
+          )}
+
+          {!isRegister && !isForgot && (
+            <button type="button" className="auth-forgot-link" onClick={goToForgot}>
+              ¿Olvidaste tu contraseña?
+            </button>
+          )}
 
           {status.type && (
             <div className={`auth-status auth-status--${status.type}`} role="status" aria-live="polite">
@@ -219,7 +255,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
               <Loader2 size={18} className="auth-spinner" />
             ) : (
               <>
-                {isRegister ? 'Crear Cuenta' : 'Iniciar Sesión'}
+                {isForgot ? 'Enviar Enlace' : isRegister ? 'Crear Cuenta' : 'Iniciar Sesión'}
                 <ArrowRight size={16} />
               </>
             )}
@@ -227,12 +263,20 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
         </form>
 
         <div className="auth-footer">
-          <p>
-            {isRegister ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}{' '}
-            <button className="auth-switch" onClick={toggleMode}>
-              {isRegister ? 'Iniciar sesión' : 'Regístrate gratis'}
-            </button>
-          </p>
+          {isForgot ? (
+            <p>
+              <button className="auth-switch" onClick={backToLogin}>
+                ← Volver a iniciar sesión
+              </button>
+            </p>
+          ) : (
+            <p>
+              {isRegister ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}{' '}
+              <button className="auth-switch" onClick={toggleMode}>
+                {isRegister ? 'Iniciar sesión' : 'Regístrate gratis'}
+              </button>
+            </p>
+          )}
         </div>
       </div>
     </div>

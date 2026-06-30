@@ -88,12 +88,20 @@ export function AuthProvider({ children }) {
     return { ok: true };
   }, []);
 
+  const resetPassword = useCallback(async (email) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin,
+    });
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  }, []);
+
   const logout = useCallback(async () => {
     await supabase.auth.signOut();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile }}>
+    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );
