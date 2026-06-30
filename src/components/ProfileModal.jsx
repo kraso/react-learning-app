@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Camera, User, Phone, AtSign, Loader2, CheckCircle2, AlertCircle, Mail } from 'lucide-react';
+import { X, Camera, User, Phone, AtSign, Loader2, CheckCircle2, AlertCircle, Mail, Lock } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import './ProfileModal.css';
 
 export default function ProfileModal({ isOpen, onClose }) {
-  const { user, updateProfile, updateEmail, refreshUser } = useAuth();
+  const { user, updateProfile, updateEmail, updatePassword, refreshUser } = useAuth();
   const [form, setForm] = useState({ display_name: '', alias: '', phone: '' });
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -13,6 +13,10 @@ export default function ProfileModal({ isOpen, onClose }) {
   const [newEmail, setNewEmail] = useState('');
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailStatus, setEmailStatus] = useState({ type: null, message: '' });
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [pwLoading, setPwLoading] = useState(false);
+  const [pwStatus, setPwStatus] = useState({ type: null, message: '' });
   const fileRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -31,6 +35,9 @@ export default function ProfileModal({ isOpen, onClose }) {
       setError('');
       setNewEmail('');
       setEmailStatus({ type: null, message: '' });
+      setNewPassword('');
+      setConfirmPassword('');
+      setPwStatus({ type: null, message: '' });
     }
   }, [isOpen]);
 
@@ -107,6 +114,32 @@ export default function ProfileModal({ isOpen, onClose }) {
       setNewEmail('');
     } else {
       setEmailStatus({ type: 'error', message: result.error });
+    }
+  };
+
+  const handlePasswordChange = async () => {
+    if (!newPassword) {
+      setPwStatus({ type: 'error', message: 'Introduce una nueva contraseña' });
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPwStatus({ type: 'error', message: 'La contraseña debe tener al menos 8 caracteres' });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPwStatus({ type: 'error', message: 'Las contraseñas no coinciden' });
+      return;
+    }
+    setPwLoading(true);
+    setPwStatus({ type: null, message: '' });
+    const result = await updatePassword(newPassword);
+    setPwLoading(false);
+    if (result.ok) {
+      setPwStatus({ type: 'success', message: 'Contraseña actualizada correctamente' });
+      setNewPassword('');
+      setConfirmPassword('');
+    } else {
+      setPwStatus({ type: 'error', message: result.error });
     }
   };
 
@@ -199,6 +232,53 @@ export default function ProfileModal({ isOpen, onClose }) {
               </div>
             )}
           </div>
+
+          <div className="profile-section-divider" />
+
+          <div className="profile-field">
+            <label className="profile-label" htmlFor="profile-new-password">Cambiar contraseña</label>
+            <div className="profile-input-wrap">
+              <Lock size={16} className="profile-input-icon" />
+              <input
+                id="profile-new-password"
+                type="password"
+                className="profile-input"
+                placeholder="Nueva contraseña (mín. 8 caracteres)"
+                value={newPassword}
+                onChange={(e) => { setNewPassword(e.target.value); if (pwStatus.type) setPwStatus({ type: null, message: '' }); }}
+                autoComplete="new-password"
+              />
+            </div>
+          </div>
+
+          <div className="profile-field">
+            <label className="profile-label" htmlFor="profile-confirm-password">Confirmar contraseña</label>
+            <div className="profile-email-row">
+              <div className="profile-input-wrap profile-input-wrap--grow">
+                <Lock size={16} className="profile-input-icon" />
+                <input
+                  id="profile-confirm-password"
+                  type="password"
+                  className="profile-input"
+                  placeholder="Repite la contraseña"
+                  value={confirmPassword}
+                  onChange={(e) => { setConfirmPassword(e.target.value); if (pwStatus.type) setPwStatus({ type: null, message: '' }); }}
+                  autoComplete="new-password"
+                />
+              </div>
+              <button type="button" className="profile-email-btn" disabled={pwLoading} onClick={handlePasswordChange}>
+                {pwLoading ? <Loader2 size={16} className="profile-spinner" /> : 'Cambiar'}
+              </button>
+            </div>
+            {pwStatus.type && (
+              <div className={`profile-email-status profile-email-status--${pwStatus.type}`} role="status" aria-live="polite">
+                {pwStatus.type === 'error' ? <AlertCircle size={14} /> : <CheckCircle2 size={14} />}
+                {pwStatus.message}
+              </div>
+            )}
+          </div>
+
+          <div className="profile-section-divider" />
 
           <div className="profile-field">
             <label className="profile-label" htmlFor="profile-alias">Alias</label>

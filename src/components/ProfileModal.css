@@ -277,6 +277,13 @@
 }
 
 /* Status */
+.profile-section-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.5rem 0;
+}
+
+/* Status */
 .profile-status {
   display: flex;
   align-items: center;
