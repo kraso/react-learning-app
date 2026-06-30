@@ -138,12 +138,10 @@ export function AuthProvider({ children }) {
 
   const updateEmail = useCallback(async (newEmail) => {
     try {
-      const { data, error } = await supabase.auth.updateUser({ email: newEmail });
-      console.log('updateEmail result:', { data, error });
+      const { error } = await supabase.auth.updateUser({ email: newEmail });
       if (error) return { ok: false, error: error.message };
       return { ok: true };
     } catch (err) {
-      console.error('updateEmail exception:', err);
       return { ok: false, error: err.message || 'Error al actualizar el email' };
     }
   }, []);
@@ -153,8 +151,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const refreshUser = useCallback(async () => {
-    const { data, error } = await supabase.auth.refreshSession();
-    console.log('refreshSession:', { user: data?.user, error });
+    const { data } = await supabase.auth.refreshSession();
     if (data?.user) {
       const profile = await loadProfile(data.user.id);
       setUser({
