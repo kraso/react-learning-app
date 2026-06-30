@@ -20,9 +20,13 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const hash = window.location.hash;
-    if (hash.includes('type=recovery') || hash.includes('access_token')) {
+    const search = window.location.search;
+    const isRecovery = hash.includes('type=recovery') || search.includes('type=recovery')
+      || hash.includes('access_token') || search.includes('access_token');
+
+    if (isRecovery) {
       setIsRecoveringPassword(true);
-      window.location.hash = '';
+      window.history.replaceState({}, '', window.location.pathname);
       return;
     }
 
