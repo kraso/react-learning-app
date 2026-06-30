@@ -19,6 +19,13 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.includes('type=recovery') || hash.includes('access_token')) {
+      setIsRecoveringPassword(true);
+      window.location.hash = '';
+      return;
+    }
+
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         const profile = await loadProfile(session.user.id);
