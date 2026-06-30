@@ -89,11 +89,18 @@ export function AuthProvider({ children }) {
   }, []);
 
   const resetPassword = useCallback(async (email) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin,
-    });
-    if (error) return { ok: false, error: error.message };
-    return { ok: true };
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/`,
+      });
+      if (error) {
+        const msg = error.message || error.error_description || 'Error al enviar el enlace de restablecimiento';
+        return { ok: false, error: msg };
+      }
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: err.message || 'Error de conexión al enviar el enlace' };
+    }
   }, []);
 
   const logout = useCallback(async () => {
