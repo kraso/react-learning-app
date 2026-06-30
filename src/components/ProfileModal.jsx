@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import './ProfileModal.css';
 
 export default function ProfileModal({ isOpen, onClose }) {
-  const { user, updateProfile, updateEmail } = useAuth();
+  const { user, updateProfile, updateEmail, refreshUser } = useAuth();
   const [form, setForm] = useState({ display_name: '', alias: '', phone: '' });
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,18 +18,20 @@ export default function ProfileModal({ isOpen, onClose }) {
 
   useEffect(() => {
     if (isOpen && user) {
-      setForm({
-        display_name: user.profile?.display_name || user.name || '',
-        alias: user.profile?.alias || '',
-        phone: user.profile?.phone || '',
+      refreshUser().then(() => {
+        setForm({
+          display_name: user.profile?.display_name || user.name || '',
+          alias: user.profile?.alias || '',
+          phone: user.profile?.phone || '',
+        });
+        setAvatarPreview(user.profile?.avatar_url || null);
       });
-      setAvatarPreview(user.profile?.avatar_url || null);
       setSaved(false);
       setError('');
       setNewEmail('');
       setEmailStatus({ type: null, message: '' });
     }
-  }, [isOpen, user]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;

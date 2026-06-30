@@ -152,8 +152,21 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut();
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      const profile = await loadProfile(session.user.id);
+      setUser({
+        id: session.user.id,
+        name: session.user.user_metadata.name,
+        email: session.user.email,
+        profile,
+      });
+    }
+  }, [loadProfile]);
+
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile, resetPassword, updatePassword, updateEmail, isRecoveringPassword, setIsRecoveringPassword }}>
+    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile, resetPassword, updatePassword, updateEmail, isRecoveringPassword, setIsRecoveringPassword, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
