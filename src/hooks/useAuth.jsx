@@ -154,12 +154,14 @@ export function AuthProvider({ children }) {
 
   const refreshUser = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user) {
-      const profile = await loadProfile(session.user.id);
+    const { data: { user: freshUser } } = await supabase.auth.getUser();
+    const u = freshUser || session?.user;
+    if (u) {
+      const profile = await loadProfile(u.id);
       setUser({
-        id: session.user.id,
-        name: session.user.user_metadata.name,
-        email: session.user.email,
+        id: u.id,
+        name: u.user_metadata.name,
+        email: u.email,
         profile,
       });
     }
