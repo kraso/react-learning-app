@@ -472,8 +472,6 @@
 .hero-video {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
   border-radius: 13px;
   background: #0a0a12;
 }
