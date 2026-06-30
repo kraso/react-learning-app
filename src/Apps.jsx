@@ -28,6 +28,7 @@ import { useTheme } from './hooks/useTheme';
 import { AuthProvider, useAuth, loadUserProgress, saveUserProgress } from './hooks/useAuth';
 import ExerciseViewer from './components/ExerciseViewer';
 import ProfileModal from './components/ProfileModal';
+import LegalPage from './components/LegalPage';
 
 const CATEGORIES = ['lecciones', 'ejercicios', 'pruebas'];
 
@@ -66,6 +67,7 @@ const AppsInner = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [progressLoaded, setProgressLoaded] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [legalView, setLegalView] = useState(null);
 
   // Load progress when user changes
   useEffect(() => {
@@ -379,6 +381,7 @@ const AppsInner = () => {
   };
 
   const goToLanding = () => setCurrentView('landing');
+  const goToLegal = (type) => { setLegalView(type); setCurrentView('legal'); };
 
   const CourseNavbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -453,12 +456,17 @@ const AppsInner = () => {
     );
   };
 
+  if (currentView === 'legal') {
+    return <LegalPage type={legalView} onBack={goToLanding} />;
+  }
+
   if (currentView === 'landing') {
     return (
       <LandingPage
         onStartCourse={startCourse}
         theme={theme}
         toggleTheme={toggleTheme}
+        onGoToLegal={goToLegal}
       />
     );
   }

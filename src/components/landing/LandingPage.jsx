@@ -539,7 +539,7 @@ function CoursesSection() {
   );
 }
 
-function Footer({ onNavigate }) {
+function Footer({ onNavigate, onGoToLegal }) {
   return (
     <footer className="footer" aria-label="Pie de página">
       <div className="footer-inner">
@@ -590,6 +590,10 @@ function Footer({ onNavigate }) {
         </div>
         <div className="footer-bottom">
           <span className="footer-copy">&copy; 2026 React Learning App. Hecho con React 19.</span>
+          <div className="footer-legal-links">
+            <button onClick={() => onGoToLegal('terminos')}>Términos y Condiciones</button>
+            <button onClick={() => onGoToLegal('privacidad')}>Política de Privacidad</button>
+          </div>
           <div className="footer-bottom-links">
             <Heart size={14} />
             <span>Construido para aprender</span>
@@ -600,7 +604,7 @@ function Footer({ onNavigate }) {
   );
 }
 
-export default function LandingPage({ onStartCourse, theme, toggleTheme }) {
+export default function LandingPage({ onStartCourse, theme, toggleTheme, onGoToLegal }) {
   const { user, logout } = useAuth();
   const [currentView, setCurrentView] = useState('landing');
   const [authModal, setAuthModal] = useState({ open: false, mode: 'login' });
@@ -642,7 +646,7 @@ export default function LandingPage({ onStartCourse, theme, toggleTheme }) {
       {currentView === 'docs' && <DocumentationSection />}
       {currentView === 'courses' && <CoursesSection />}
 
-      <Footer onNavigate={handleNavigate} />
+          <Footer onNavigate={handleNavigate} onGoToLegal={onGoToLegal} />
 
       <AuthModal isOpen={authModal.open} onClose={closeAuth} initialMode={authModal.mode} />
       <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
