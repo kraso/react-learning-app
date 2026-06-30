@@ -140,11 +140,21 @@ const AppsInner = () => {
   const currentLevelTitle = courseData[currentLevelName]?.title ?? '';
 
   const scrollToLevel = (levelName) => {
-    const el = document.getElementById(`level-${levelName}`);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setCurrentLevelName(levelName);
-    }
+    setCurrentLevelName(levelName);
+    requestAnimationFrame(() => {
+      const el = document.getElementById(`level-${levelName}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  };
+
+  const isLevelLocked = (levelName) => {
+    const levelNum = LEVEL_NUMBERS[levelName];
+    if (levelNum === 1) return false;
+    const prevLevelKey = Object.keys(courseData).find((k) => LEVEL_NUMBERS[k] === levelNum - 1);
+    if (!prevLevelKey) return false;
+    return !isLevelLessonsComplete(prevLevelKey);
   };
 
   const LevelNav = () => (
@@ -154,18 +164,24 @@ const AppsInner = () => {
         const isActive = levelName === currentLevelName;
         const completed = levelData.lecciones.filter((l) => completedItems.includes(l.id)).length;
         const total = levelData.lecciones.length;
+        const locked = isLevelLocked(levelName);
         return (
           <button
             key={levelName}
-            className={`level-nav-item ${isActive ? 'level-nav-item--active' : ''}`}
+            className={`level-nav-item ${isActive ? 'level-nav-item--active' : ''} ${locked ? 'level-nav-item--locked' : ''}`}
             onClick={() => scrollToLevel(levelName)}
             aria-current={isActive ? 'true' : undefined}
+            aria-disabled={locked}
+            title={locked ? 'Completa el nivel anterior para desbloquear' : ''}
           >
             <span className="level-nav-badge">{LEVEL_NUMBERS[levelName]}</span>
             <div className="level-nav-info">
               <span className="level-nav-name">{levelData.title}</span>
-              <span className="level-nav-progress">{completed}/{total} lecciones</span>
+              <span className="level-nav-progress">
+                {locked ? 'Bloqueado' : `${completed}/${total} lecciones`}
+              </span>
             </div>
+            {locked && <Lock size={12} className="level-nav-lock" />}
           </button>
         );
       })}

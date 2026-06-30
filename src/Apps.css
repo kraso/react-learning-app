@@ -519,6 +519,7 @@ body {
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
   transition: border-color var(--transition), background var(--transition);
+  scroll-margin-top: 1rem;
 }
 
 .level-section.active {
@@ -1024,6 +1025,21 @@ body {
   background: var(--accent-subtle);
   border-color: var(--border-accent);
   color: var(--accent);
+}
+
+.level-nav-item--locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.level-nav-item--locked:hover {
+  background: none;
+}
+
+.level-nav-lock {
+  margin-left: auto;
+  color: var(--text-faint);
+  flex-shrink: 0;
 }
 
 .level-nav-badge {
