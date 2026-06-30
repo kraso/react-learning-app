@@ -310,6 +310,7 @@ export default function ExerciseViewer({ path, fileId, isExercise = true }) {
           <button
             className="ev-hints-toggle"
             onClick={() => setHintsExpanded(!hintsExpanded)}
+            aria-expanded={hintsExpanded}
           >
             <Lightbulb size={16} />
             <span>Pistas disponibles ({plainHints.length})</span>
@@ -368,6 +369,7 @@ export default function ExerciseViewer({ path, fileId, isExercise = true }) {
           onClick={() => setShowSolution(!showSolution)}
           disabled={!saved}
           title={!saved ? 'Guarda tu código primero para ver la solución' : ''}
+          aria-expanded={showSolution}
         >
           {showSolution ? <EyeOff size={16} /> : <Eye size={16} />}
           <span>{showSolution ? 'Ocultar solución' : 'Ver solución'}</span>

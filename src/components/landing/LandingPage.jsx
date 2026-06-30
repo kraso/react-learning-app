@@ -261,7 +261,7 @@ function Navbar({ theme, toggleTheme, onNavigate, currentView, onOpenAuth, user,
   const ThemeIcon = theme === 'dark' ? Sun : theme === 'light' ? Moon : Monitor;
 
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
+    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`} aria-label="Principal">
       <div className="navbar-inner">
         <button className="navbar-brand" onClick={() => onNavigate('landing')}>
           <div className="navbar-logo">
@@ -299,7 +299,7 @@ function Navbar({ theme, toggleTheme, onNavigate, currentView, onOpenAuth, user,
         </div>
 
         <div className="navbar-actions">
-          <button className="theme-toggle" onClick={toggleTheme} title="Cambiar tema">
+          <button className="theme-toggle" onClick={toggleTheme} title="Cambiar tema" aria-label="Cambiar tema">
             <ThemeIcon size={18} />
           </button>
 
@@ -326,7 +326,7 @@ function Navbar({ theme, toggleTheme, onNavigate, currentView, onOpenAuth, user,
             </div>
           )}
 
-          <button className="mobile-menu-btn" onClick={() => setMobileOpen(!mobileOpen)}>
+          <button className="mobile-menu-btn" onClick={() => setMobileOpen(!mobileOpen)} aria-expanded={mobileOpen} aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}>
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
@@ -361,7 +361,10 @@ function HeroSection({ onStart, onOpenAuth, user }) {
               loop
               muted
               playsInline
-            />
+              aria-label="Vídeo promocional del curso React"
+            >
+              <track kind="descriptions" src="" srcLang="es" label="Descripción del vídeo" />
+            </video>
           </div>
         </div>
         <p className="hero-subtitle">
@@ -534,7 +537,7 @@ function CoursesSection() {
 
 function Footer({ onNavigate }) {
   return (
-    <footer className="footer">
+    <footer className="footer" aria-label="Pie de página">
       <div className="footer-inner">
         <div className="footer-top">
           <div className="footer-brand">
@@ -546,29 +549,29 @@ function Footer({ onNavigate }) {
               <p className="footer-brand-desc">Aprende React de forma interactiva y moderna</p>
             </div>
           </div>
-          <div className="footer-columns">
+          <nav className="footer-columns" aria-label="Navegación del sitio">
             <div className="footer-col">
-              <h4>Navegación</h4>
+              <h2 className="footer-col-title">Navegación</h2>
               <button onClick={() => onNavigate('landing')}>Inicio</button>
               <button onClick={() => onNavigate('docs')}>Documentación</button>
               <button onClick={() => onNavigate('courses')}>Cursos</button>
               <button onClick={() => onNavigate('course')}>Empezar Curso</button>
             </div>
             <div className="footer-col">
-              <h4>Recursos</h4>
+              <h2 className="footer-col-title">Recursos</h2>
               <a href="https://react.dev" target="_blank" rel="noopener noreferrer">React Docs</a>
               <a href="https://github.com/facebook/react" target="_blank" rel="noopener noreferrer">GitHub</a>
               <a href="https://react.dev/learn" target="_blank" rel="noopener noreferrer">Tutorial Oficial</a>
               <a href="https://react.dev/reference" target="_blank" rel="noopener noreferrer">API Reference</a>
             </div>
             <div className="footer-col">
-              <h4>Comunidad</h4>
+              <h2 className="footer-col-title">Comunidad</h2>
               <a href="https://www.reactiflux.com" target="_blank" rel="noopener noreferrer">Reactiflux</a>
               <a href="https://github.com/enaqx/awesome-react" target="_blank" rel="noopener noreferrer">Awesome React</a>
               <a href="https://stackoverflow.com/questions/tagged/reactjs" target="_blank" rel="noopener noreferrer">Stack Overflow</a>
               <a href="https://reddit.com/r/reactjs" target="_blank" rel="noopener noreferrer">Reddit r/reactjs</a>
             </div>
-          </div>
+          </nav>
         </div>
         <div className="footer-bottom">
           <span className="footer-copy">&copy; 2026 React Learning App. Hecho con React 19.</span>

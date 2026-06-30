@@ -1,0 +1,16 @@
+{
+  "name": "React Learning App",
+  "short_name": "ReactLearn",
+  "description": "Curso interactivo gratuito para aprender React 19 desde cero",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08080c",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

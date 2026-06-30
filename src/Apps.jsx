@@ -201,7 +201,10 @@ const AppsInner = () => {
                         <li
                           key={file.id}
                           className={active ? 'active-file' : ''}
+                          role="button"
+                          tabIndex={0}
                           onClick={() => handleFileClick(file.path)}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFileClick(file.path); } }}
                         >
                           {done ? (
                             <CircleCheck size={14} className="check-icon" />
@@ -340,7 +343,7 @@ const AppsInner = () => {
     }, [menuOpen]);
 
     return (
-      <nav className="course-navbar">
+      <nav className="course-navbar" aria-label="Curso">
         <button className="course-nav-btn" onClick={goToLanding} title="Volver al Inicio">
           <Home size={16} />
           <span>Inicio</span>
@@ -358,10 +361,12 @@ const AppsInner = () => {
               <button
                 className="course-nav-user"
                 onClick={() => setMenuOpen(!menuOpen)}
+                aria-expanded={menuOpen}
+                aria-haspopup="true"
               >
                 <div className="course-nav-avatar">{user.name?.charAt(0)?.toUpperCase() || '?'}</div>
                 <span className="course-nav-username">{user.name || user.email || 'Usuario'}</span>
-                <svg className={`course-nav-chevron ${menuOpen ? 'open' : ''}`} width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <svg className={`course-nav-chevron ${menuOpen ? 'open' : ''}`} width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                   <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>

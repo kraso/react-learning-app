@@ -1,0 +1,19 @@
+{
+  "rewrites": [
+    { "source": "/((?!assets/|docs/|favicon.svg|icons.svg|promo-video.mp4).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/promo-video.mp4",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}

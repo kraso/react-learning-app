@@ -49,9 +49,9 @@
   --lp-accent-glow: rgba(79, 70, 229, 0.15);
 
   --lp-text: #0f172a;
-  --lp-text-secondary: #475569;
-  --lp-text-muted: #94a3b8;
-  --lp-text-faint: #cbd5e1;
+  --lp-text-secondary: #334155;
+  --lp-text-muted: #475569;
+  --lp-text-faint: #94a3b8;
 
   --lp-border: rgba(0, 0, 0, 0.08);
   --lp-border-strong: rgba(0, 0, 0, 0.12);
@@ -1161,5 +1161,41 @@
 
   .navbar {
     padding: 0 1rem;
+  }
+}
+
+/* ── Footer heading ── */
+.footer-col-title {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lp-text-muted);
+  margin: 0 0 1rem;
+}
+
+/* ── Screen reader only ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -193,7 +193,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
                 type="button"
                 className="auth-password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
-                tabIndex={-1}
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               >
                 {showPassword ? 'Ocultar' : 'Ver'}
               </button>
@@ -204,7 +204,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
           </div>
 
           {status.type && (
-            <div className={`auth-status auth-status--${status.type}`}>
+            <div className={`auth-status auth-status--${status.type}`} role="status" aria-live="polite">
               {status.type === 'error' ? <AlertCircle size={16} /> : <CheckCircle2 size={16} />}
               {status.message}
             </div>

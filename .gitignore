@@ -32,3 +32,5 @@ watching-landing-video/
 *.njsproj
 *.sln
 *.sw?
+
+.vercel
