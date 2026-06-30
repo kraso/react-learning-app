@@ -19,30 +19,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session?.user) {
-        const profile = await loadProfile(session.user.id);
-        setUser({
-          id: session.user.id,
-          name: session.user.user_metadata.name,
-          email: session.user.email,
-          profile,
-        });
-      }
-      setLoading(false);
-    });
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'PASSWORD_RECOVERY') {
         setIsRecoveringPassword(true);
-        if (session?.user) {
-          setUser({
-            id: session.user.id,
-            name: session.user.user_metadata?.name,
-            email: session.user.email,
-            profile: null,
-          });
-        }
         return;
       }
       if (session?.user) {
@@ -56,6 +35,19 @@ export function AuthProvider({ children }) {
       } else {
         setUser(null);
       }
+    });
+
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session?.user) {
+        const profile = await loadProfile(session.user.id);
+        setUser({
+          id: session.user.id,
+          name: session.user.user_metadata.name,
+          email: session.user.email,
+          profile,
+        });
+      }
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
