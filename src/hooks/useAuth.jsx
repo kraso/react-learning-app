@@ -125,10 +125,12 @@ export function AuthProvider({ children }) {
 
   const updateEmail = useCallback(async (newEmail) => {
     try {
-      const { error } = await supabase.auth.updateUser({ email: newEmail });
+      const { data, error } = await supabase.auth.updateUser({ email: newEmail });
+      console.log('updateEmail result:', { data, error });
       if (error) return { ok: false, error: error.message };
       return { ok: true };
     } catch (err) {
+      console.error('updateEmail exception:', err);
       return { ok: false, error: err.message || 'Error al actualizar el email' };
     }
   }, []);

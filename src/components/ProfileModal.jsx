@@ -172,7 +172,7 @@ export default function ProfileModal({ isOpen, onClose }) {
 
           <div className="profile-field">
             <label className="profile-label" htmlFor="profile-new-email">Cambiar email</label>
-            <form className="profile-email-row" onSubmit={handleEmailChange}>
+            <div className="profile-email-row" onSubmit={handleEmailChange}>
               <div className="profile-input-wrap profile-input-wrap--grow">
                 <Mail size={16} className="profile-input-icon" />
                 <input
@@ -185,10 +185,10 @@ export default function ProfileModal({ isOpen, onClose }) {
                   autoComplete="email"
                 />
               </div>
-              <button type="submit" className="profile-email-btn" disabled={emailLoading}>
+              <button type="button" className="profile-email-btn" disabled={emailLoading} onClick={handleEmailChange}>
                 {emailLoading ? <Loader2 size={16} className="profile-spinner" /> : 'Cambiar'}
               </button>
-            </form>
+            </div>
             {emailStatus.type && (
               <div className={`profile-email-status profile-email-status--${emailStatus.type}`} role="status" aria-live="polite">
                 {emailStatus.type === 'error' ? <AlertCircle size={14} /> : <CheckCircle2 size={14} />}
