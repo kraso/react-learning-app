@@ -271,6 +271,33 @@
   opacity: 0.8;
 }
 
+.auth-forgot-inline {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--lp-accent);
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+  animation: authFadeIn 0.2s ease-out;
+}
+
+[data-theme="light"] .auth-forgot-inline {
+  background: rgba(99, 102, 241, 0.06);
+  border-color: rgba(99, 102, 241, 0.15);
+}
+
+.auth-forgot-inline:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
 .auth-footer {
   text-align: center;
   margin-top: 1.5rem;

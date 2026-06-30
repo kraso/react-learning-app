@@ -242,8 +242,14 @@ export default function AuthModal({ isOpen, onClose, initialMode = MODES.LOGIN }
           {status.type && (
             <div className={`auth-status auth-status--${status.type}`} role="status" aria-live="polite">
               {status.type === 'error' ? <AlertCircle size={16} /> : <CheckCircle2 size={16} />}
-              {status.message}
+              <span>{status.message}</span>
             </div>
+          )}
+
+          {status.type === 'error' && !isRegister && !isForgot && (
+            <button type="button" className="auth-forgot-inline" onClick={goToForgot}>
+              ¿Olvidaste tu contraseña?
+            </button>
           )}
 
           <button
