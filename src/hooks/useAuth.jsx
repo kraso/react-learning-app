@@ -154,13 +154,16 @@ export function AuthProvider({ children }) {
     const { data } = await supabase.auth.refreshSession();
     if (data?.user) {
       const profile = await loadProfile(data.user.id);
-      setUser({
+      const updatedUser = {
         id: data.user.id,
         name: data.user.user_metadata.name,
         email: data.user.email,
         profile,
-      });
+      };
+      setUser(updatedUser);
+      return updatedUser;
     }
+    return null;
   }, [loadProfile]);
 
   return (

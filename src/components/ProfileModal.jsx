@@ -18,13 +18,14 @@ export default function ProfileModal({ isOpen, onClose }) {
 
   useEffect(() => {
     if (isOpen && user) {
-      refreshUser().then(() => {
+      refreshUser().then((freshUser) => {
+        const u = freshUser || user;
         setForm({
-          display_name: user.profile?.display_name || user.name || '',
-          alias: user.profile?.alias || '',
-          phone: user.profile?.phone || '',
+          display_name: u.profile?.display_name || u.name || '',
+          alias: u.profile?.alias || '',
+          phone: u.profile?.phone || '',
         });
-        setAvatarPreview(user.profile?.avatar_url || null);
+        setAvatarPreview(u.profile?.avatar_url || null);
       });
       setSaved(false);
       setError('');
@@ -174,7 +175,7 @@ export default function ProfileModal({ isOpen, onClose }) {
 
           <div className="profile-field">
             <label className="profile-label" htmlFor="profile-new-email">Cambiar email</label>
-            <div className="profile-email-row" onSubmit={handleEmailChange}>
+            <div className="profile-email-row">
               <div className="profile-input-wrap profile-input-wrap--grow">
                 <Mail size={16} className="profile-input-icon" />
                 <input

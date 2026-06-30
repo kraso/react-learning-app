@@ -74,6 +74,7 @@ const AppsInner = () => {
   useEffect(() => {
     if (authLoading) return;
     const userId = user?.id || null;
+    setProgressLoaded(false);
     loadUserProgress(userId).then((saved) => {
       setCompletedItems(saved);
       setProgressLoaded(true);
