@@ -19,17 +19,6 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    const hash = window.location.hash;
-    const search = window.location.search;
-    const isRecovery = hash.includes('type=recovery') || search.includes('type=recovery')
-      || hash.includes('access_token') || search.includes('access_token');
-
-    if (isRecovery) {
-      setIsRecoveringPassword(true);
-      window.history.replaceState({}, '', window.location.pathname);
-      return;
-    }
-
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         const profile = await loadProfile(session.user.id);
@@ -46,6 +35,14 @@ export function AuthProvider({ children }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'PASSWORD_RECOVERY') {
         setIsRecoveringPassword(true);
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            name: session.user.user_metadata?.name,
+            email: session.user.email,
+            profile: null,
+          });
+        }
         return;
       }
       if (session?.user) {
@@ -123,6 +120,8 @@ export function AuthProvider({ children }) {
 
   const updatePassword = useCallback(async (newPassword) => {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return { ok: false, error: 'Sesión no disponible. Intenta abrir el enlace de nuevo.' };
       const { error } = await supabase.auth.updateUser({ password: newPassword });
       if (error) return { ok: false, error: error.message };
       setIsRecoveringPassword(false);
