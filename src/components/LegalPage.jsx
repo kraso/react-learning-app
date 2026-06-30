@@ -4,7 +4,7 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import { fetchMarkdownContent } from '../utils/contentLoader';
 import './LegalPage.css';
 
-export default function LegalPage({ type, onBack }) {
+export default function LegalPage({ type, onBack, onNavigate }) {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -18,6 +18,28 @@ export default function LegalPage({ type, onBack }) {
       setLoading(false);
     });
   }, [file]);
+
+  const components = {
+    a: ({ href, children, ...props }) => {
+      if (href === '#/privacidad' || href === '#/terminos') {
+        const target = href.includes('privacidad') ? 'privacidad' : 'terminos';
+        return (
+          <button
+            className="legal-inline-link"
+            onClick={() => onNavigate?.(target)}
+            {...props}
+          >
+            {children}
+          </button>
+        );
+      }
+      return (
+        <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+          {children}
+        </a>
+      );
+    },
+  };
 
   return (
     <div className="legal-page">
@@ -36,7 +58,7 @@ export default function LegalPage({ type, onBack }) {
           </div>
         ) : (
           <div className="markdown-body">
-            <ReactMarkdown>{content}</ReactMarkdown>
+            <ReactMarkdown components={components}>{content}</ReactMarkdown>
           </div>
         )}
       </div>

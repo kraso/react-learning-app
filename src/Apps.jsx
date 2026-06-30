@@ -457,7 +457,7 @@ const AppsInner = () => {
   };
 
   if (currentView === 'legal') {
-    return <LegalPage type={legalView} onBack={goToLanding} />;
+    return <LegalPage type={legalView} onBack={goToLanding} onNavigate={goToLegal} />;
   }
 
   if (currentView === 'landing') {
