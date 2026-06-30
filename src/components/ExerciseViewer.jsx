@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Code2,
   Eye,
@@ -18,6 +18,88 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './ExerciseViewer.css';
 
 const STORAGE_PREFIX = 'exercise_code_';
+
+function CodeEditor({ value, onChange, placeholder, spellCheck }) {
+  const textareaRef = useRef(null);
+  const highlightRef = useRef(null);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const ta = e.target;
+      const start = ta.selectionStart;
+      const end = ta.selectionEnd;
+      const val = ta.value;
+
+      if (e.shiftKey) {
+        // Dedent: remove up to 2 spaces before cursor
+        const before = val.substring(0, start);
+        const lineStart = before.lastIndexOf('\n') + 1;
+        const lineBefore = before.substring(lineStart);
+        const spacesToRemove = lineBefore.startsWith('  ') ? 2 : lineBefore.startsWith(' ') ? 1 : 0;
+        if (spacesToRemove > 0) {
+          const newVal = val.substring(0, lineStart) + val.substring(lineStart + spacesToRemove);
+          onChange(newVal);
+          requestAnimationFrame(() => {
+            ta.selectionStart = ta.selectionEnd = start - spacesToRemove;
+          });
+        }
+      } else {
+        // Indent: insert 2 spaces
+        const newVal = val.substring(0, start) + '  ' + val.substring(end);
+        onChange(newVal);
+        requestAnimationFrame(() => {
+          ta.selectionStart = ta.selectionEnd = start + 2;
+        });
+      }
+    }
+  };
+
+  const handleScroll = () => {
+    if (highlightRef.current && textareaRef.current) {
+      highlightRef.current.scrollTop = textareaRef.current.scrollTop;
+      highlightRef.current.scrollLeft = textareaRef.current.scrollLeft;
+    }
+  };
+
+  const lines = value.split('\n');
+  const lineCount = lines.length;
+
+  return (
+    <div className="ev-code-editor">
+      <div className="ev-line-numbers">
+        {Array.from({ length: lineCount }, (_, i) => (
+          <span key={i + 1}>{i + 1}</span>
+        ))}
+      </div>
+      <div className="ev-editor-wrapper">
+        <pre className="ev-editor-highlight" ref={highlightRef} aria-hidden="true">
+          <SyntaxHighlighter
+            language="jsx"
+            style={vscDarkPlus}
+            PreTag="div"
+            customStyle={{ margin: 0, padding: '0.8rem', background: 'transparent', fontSize: '0.85rem', lineHeight: '1.6' }}
+          >
+            {value || ' '}
+          </SyntaxHighlighter>
+        </pre>
+        <textarea
+          ref={textareaRef}
+          className="ev-editor"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onScroll={handleScroll}
+          placeholder={placeholder}
+          spellCheck={spellCheck}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+        />
+      </div>
+    </div>
+  );
+}
 
 function parseExerciseMarkdown(raw) {
   const lines = raw.split('\n');
@@ -118,6 +200,13 @@ function MarkdownSection({ content }) {
                 {codeString}
               </SyntaxHighlighter>
             );
+          },
+          p({ children }) {
+            const hasBlock = React.Children.toArray(children).some(
+              (c) => React.isValidElement(c) && c.props?.className?.includes('code-block')
+            );
+            if (hasBlock) return <>{children}</>;
+            return <p>{children}</p>;
           },
         }}
       >
@@ -256,10 +345,9 @@ export default function ExerciseViewer({ path, fileId, isExercise = true }) {
             </button>
           </div>
         </div>
-        <textarea
-          className="ev-editor"
+        <CodeEditor
           value={userCode}
-          onChange={(e) => { setUserCode(e.target.value); setSaved(false); }}
+          onChange={(val) => { setUserCode(val); setSaved(false); }}
           placeholder={isExercise
             ? '// Escribe tu código aquí...'
             : '// Escribe tu respuesta aquí...'

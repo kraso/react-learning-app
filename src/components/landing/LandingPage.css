@@ -449,6 +449,32 @@
   background-clip: text;
 }
 
+.hero-video-wrapper {
+  margin: 0 auto 2.5rem;
+  max-width: 800px;
+}
+
+.hero-video-frame {
+  position: relative;
+  border-radius: 16px;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--lp-accent), #a78bfa, #c4b5fd, var(--lp-accent));
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-video {
+  display: block;
+  width: 100%;
+  border-radius: 13px;
+  background: #0a0a12;
+}
+
 .hero-subtitle {
   font-size: 1.15rem;
   line-height: 1.7;

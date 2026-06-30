@@ -16,6 +16,12 @@ dist-ssr
 .agents
 .claude
 
+# Video renders
+*.mp4
+*.webm
+renders/
+watching-landing-video/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

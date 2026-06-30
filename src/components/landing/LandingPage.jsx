@@ -352,6 +352,18 @@ function HeroSection({ onStart, onOpenAuth, user }) {
         <h1 className="hero-title">
           Domina <span className="hero-highlight">React</span> desde cero
         </h1>
+        <div className="hero-video-wrapper">
+          <div className="hero-video-frame">
+            <video
+              className="hero-video"
+              src="/promo-video.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          </div>
+        </div>
         <p className="hero-subtitle">
           Curso interactivo completo con lecciones progresivas, ejercicios prácticos y evaluaciones.
           Aprende los conceptos modernos de React 19: hooks, Server Components, y más.
@@ -602,9 +614,9 @@ export default function LandingPage({ onStartCourse, theme, toggleTheme }) {
       {currentView === 'landing' && (
         <>
           <HeroSection onStart={onStartCourse} onOpenAuth={openAuth} user={user} />
-          <ComparisonSection />
           <DocumentationSection />
           <CoursesSection />
+          <ComparisonSection />
         </>
       )}
       {currentView === 'docs' && <DocumentationSection />}

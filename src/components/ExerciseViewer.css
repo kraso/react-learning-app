@@ -114,6 +114,87 @@
   overflow: hidden;
 }
 
+.ev-code-editor {
+  display: flex;
+  background: var(--bg-surface);
+}
+
+.ev-line-numbers {
+  display: flex;
+  flex-direction: column;
+  padding: 0.8rem 0;
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+  user-select: none;
+  min-width: 2.8rem;
+  text-align: right;
+}
+
+.ev-line-numbers span {
+  display: block;
+  padding: 0 0.6rem;
+  font-family: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.ev-editor-wrapper {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+.ev-editor-highlight {
+  margin: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.ev-editor-highlight pre {
+  margin: 0 !important;
+  padding: 0.8rem !important;
+  background: transparent !important;
+  min-height: 100%;
+}
+
+.ev-editor {
+  width: 100%;
+  min-height: 200px;
+  max-height: 500px;
+  overflow: auto;
+  padding: 0.8rem;
+  border: none;
+  outline: none;
+  resize: vertical;
+  font-family: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  tab-size: 2;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--text);
+  position: relative;
+  z-index: 1;
+}
+
+.ev-editor::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.ev-editor:focus {
+  outline: none;
+}
+
 .ev-editor-header {
   display: flex;
   align-items: center;
@@ -175,29 +256,6 @@
   background: rgba(239, 68, 68, 0.08);
   color: #f87171;
   border-color: rgba(239, 68, 68, 0.2);
-}
-
-.ev-editor {
-  width: 100%;
-  min-height: 200px;
-  padding: 1rem 1.25rem;
-  background: var(--bg-content);
-  color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  line-height: 1.6;
-  border: none;
-  outline: none;
-  resize: vertical;
-  tab-size: 2;
-}
-
-[data-theme="light"] .ev-editor {
-  background: #f8fafc;
-}
-
-.ev-editor::placeholder {
-  color: var(--text-faint);
 }
 
 .ev-saved-indicator {
@@ -284,4 +342,16 @@
 
 .ev-error {
   color: #f87171;
+}
+
+[data-theme="light"] .ev-line-numbers {
+  background: #f1f5f9;
+}
+
+[data-theme="light"] .ev-line-numbers span {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .ev-editor-wrapper {
+  background: #f8fafc;
 }

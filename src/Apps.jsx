@@ -62,6 +62,7 @@ const AppsInner = () => {
   const [completedItems, setCompletedItems] = useState([]);
   const [currentLevelName, setCurrentLevelName] = useState(Object.keys(courseData)[0]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [progressLoaded, setProgressLoaded] = useState(false);
 
   // Load progress when user changes
   useEffect(() => {
@@ -69,6 +70,7 @@ const AppsInner = () => {
     const userId = user?.id || null;
     loadUserProgress(userId).then((saved) => {
       setCompletedItems(saved);
+      setProgressLoaded(true);
     });
   }, [user, authLoading]);
 
@@ -91,10 +93,10 @@ const AppsInner = () => {
   }, [currentFile]);
 
   useEffect(() => {
-    if (authLoading) return;
+    if (authLoading || !progressLoaded) return;
     const userId = user?.id || null;
     saveUserProgress(userId, completedItems);
-  }, [completedItems, user, authLoading]);
+  }, [completedItems, user, authLoading, progressLoaded]);
 
   const filteredCourseData = useMemo(() => {
     return Object.entries(courseData).filter(([levelName, data]) => {
