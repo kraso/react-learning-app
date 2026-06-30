@@ -362,9 +362,7 @@ function HeroSection({ onStart, onOpenAuth, user }) {
               muted
               playsInline
               aria-label="Vídeo promocional del curso React"
-            >
-              <track kind="descriptions" src="" srcLang="es" label="Descripción del vídeo" />
-            </video>
+            />
           </div>
         </div>
         <p className="hero-subtitle">

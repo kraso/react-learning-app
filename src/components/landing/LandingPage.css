@@ -453,6 +453,7 @@
 .hero-video-wrapper {
   margin: 0 auto 2.5rem;
   max-width: 800px;
+  width: 100%;
 }
 
 .hero-video-frame {
@@ -462,6 +463,7 @@
   background: linear-gradient(135deg, var(--lp-accent), #a78bfa, #c4b5fd, var(--lp-accent));
   background-size: 200% 200%;
   animation: gradientShift 4s ease infinite;
+  aspect-ratio: 16 / 9;
 }
 
 @keyframes gradientShift {
@@ -472,8 +474,10 @@
 .hero-video {
   display: block;
   width: 100%;
+  height: 100%;
   border-radius: 13px;
   background: #0a0a12;
+  object-fit: cover;
 }
 
 .hero-subtitle {
