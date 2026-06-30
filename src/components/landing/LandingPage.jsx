@@ -577,9 +577,9 @@ function Footer({ onNavigate, onGoToLegal }) {
             </div>
             <div className="footer-col">
               <h2 className="footer-col-title">Contacto</h2>
-              <a href="mailto:markbiophysicist@gmail.com">
+              <a href="mailto:marcoscalabresibaniez@gmail.com">
                 <Mail size={13} style={{ display: 'inline', verticalAlign: '-2px', marginRight: '0.35rem' }} />
-                markbiophysicist@gmail.com
+                marcoscalabresibaniez@gmail.com
               </a>
               <a href="https://github.com/kraso/react-learning-app" target="_blank" rel="noopener noreferrer">
                 <ExternalLink size={13} style={{ display: 'inline', verticalAlign: '-2px', marginRight: '0.35rem' }} />

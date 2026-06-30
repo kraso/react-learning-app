@@ -123,12 +123,22 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const updateEmail = useCallback(async (newEmail) => {
+    try {
+      const { error } = await supabase.auth.updateUser({ email: newEmail });
+      if (error) return { ok: false, error: error.message };
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: err.message || 'Error al actualizar el email' };
+    }
+  }, []);
+
   const logout = useCallback(async () => {
     await supabase.auth.signOut();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile, resetPassword, updatePassword, isRecoveringPassword, setIsRecoveringPassword }}>
+    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile, resetPassword, updatePassword, updateEmail, isRecoveringPassword, setIsRecoveringPassword }}>
       {children}
     </AuthContext.Provider>
   );

@@ -215,6 +215,67 @@
   color: var(--text-faint);
 }
 
+.profile-email-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.profile-input-wrap--grow {
+  flex: 1;
+}
+
+.profile-email-btn {
+  padding: 0 1rem;
+  border-radius: 10px;
+  background: var(--accent-strong);
+  color: white;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-email-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.profile-email-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.profile-email-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+.profile-email-status--error {
+  color: #fca5a5;
+}
+
+[data-theme="light"] .profile-email-status--error {
+  color: #dc2626;
+}
+
+.profile-email-status--success {
+  color: #6ee7b7;
+}
+
+[data-theme="light"] .profile-email-status--success {
+  color: #16a34a;
+}
+
 /* Status */
 .profile-status {
   display: flex;

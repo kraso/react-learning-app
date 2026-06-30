@@ -1,15 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Camera, User, Phone, AtSign, Loader2, CheckCircle2 } from 'lucide-react';
+import { X, Camera, User, Phone, AtSign, Loader2, CheckCircle2, AlertCircle, Mail } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import './ProfileModal.css';
 
 export default function ProfileModal({ isOpen, onClose }) {
-  const { user, updateProfile } = useAuth();
+  const { user, updateProfile, updateEmail } = useAuth();
   const [form, setForm] = useState({ display_name: '', alias: '', phone: '' });
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailStatus, setEmailStatus] = useState({ type: null, message: '' });
   const fileRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -23,6 +26,8 @@ export default function ProfileModal({ isOpen, onClose }) {
       setAvatarPreview(user.profile?.avatar_url || null);
       setSaved(false);
       setError('');
+      setNewEmail('');
+      setEmailStatus({ type: null, message: '' });
     }
   }, [isOpen, user]);
 
@@ -80,6 +85,28 @@ export default function ProfileModal({ isOpen, onClose }) {
     }
   };
 
+  const handleEmailChange = async (e) => {
+    e.preventDefault();
+    if (!newEmail.trim() || newEmail === user?.email) {
+      setEmailStatus({ type: 'error', message: 'Introduce un email diferente al actual' });
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+      setEmailStatus({ type: 'error', message: 'Ingresa un email válido' });
+      return;
+    }
+    setEmailLoading(true);
+    setEmailStatus({ type: null, message: '' });
+    const result = await updateEmail(newEmail);
+    setEmailLoading(false);
+    if (result.ok) {
+      setEmailStatus({ type: 'success', message: 'Revisa tu nuevo email para confirmar el cambio.' });
+      setNewEmail('');
+    } else {
+      setEmailStatus({ type: 'error', message: result.error });
+    }
+  };
+
   const handleOverlayClick = (e) => {
     if (e.target === overlayRef.current) onClose();
   };
@@ -130,7 +157,7 @@ export default function ProfileModal({ isOpen, onClose }) {
           </div>
 
           <div className="profile-field">
-            <label className="profile-label" htmlFor="profile-email">Email</label>
+            <label className="profile-label" htmlFor="profile-email">Email actual</label>
             <div className="profile-input-wrap">
               <AtSign size={16} className="profile-input-icon" />
               <input
@@ -141,7 +168,33 @@ export default function ProfileModal({ isOpen, onClose }) {
                 readOnly
               />
             </div>
-            <span className="profile-hint">El email no se puede modificar</span>
+          </div>
+
+          <div className="profile-field">
+            <label className="profile-label" htmlFor="profile-new-email">Cambiar email</label>
+            <form className="profile-email-row" onSubmit={handleEmailChange}>
+              <div className="profile-input-wrap profile-input-wrap--grow">
+                <Mail size={16} className="profile-input-icon" />
+                <input
+                  id="profile-new-email"
+                  type="email"
+                  className="profile-input"
+                  placeholder="nuevo@email.com"
+                  value={newEmail}
+                  onChange={(e) => { setNewEmail(e.target.value); if (emailStatus.type) setEmailStatus({ type: null, message: '' }); }}
+                  autoComplete="email"
+                />
+              </div>
+              <button type="submit" className="profile-email-btn" disabled={emailLoading}>
+                {emailLoading ? <Loader2 size={16} className="profile-spinner" /> : 'Cambiar'}
+              </button>
+            </form>
+            {emailStatus.type && (
+              <div className={`profile-email-status profile-email-status--${emailStatus.type}`} role="status" aria-live="polite">
+                {emailStatus.type === 'error' ? <AlertCircle size={14} /> : <CheckCircle2 size={14} />}
+                {emailStatus.message}
+              </div>
+            )}
           </div>
 
           <div className="profile-field">

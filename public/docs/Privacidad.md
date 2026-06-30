@@ -7,7 +7,7 @@ En react-learning-app.dev nos tomamos muy en serio la protección de tus datos p
 ## 1. Responsable del tratamiento
 
 - **Nombre:** Marcos Calabrés Ibáñez
-- **Correo electrónico:** markbiophysicist@gmail.com
+- **Correo electrónico:** marcoscalabresibaniez@gmail.com
 - **Dirección:** Andújar, Jaén
 
 ## 2. Datos que recopilamos
@@ -47,7 +47,7 @@ No utilizamos cookies de analítica ni de publicidad de terceros.
 
 ## 6. Conservación de los datos
 
-Tus datos personales se conservarán mientras mantengas tu cuenta activa en la academia. En cualquier momento puedes solicitar la baja y la eliminación de tus datos escribiéndonos a **markbiophysicist@gmail.com**.
+Tus datos personales se conservarán mientras mantengas tu cuenta activa en la academia. En cualquier momento puedes solicitar la baja y la eliminación de tus datos escribiéndonos a **marcoscalabresibaniez@gmail.com**.
 
 ## 7. Derechos de los usuarios
 
@@ -59,7 +59,7 @@ Como usuario tienes derecho a:
 - Limitar u oponerte al tratamiento de tus datos.
 - Solicitar la portabilidad de tus datos a otro servicio.
 
-Para ejercer tus derechos puedes enviarnos un correo a **markbiophysicist@gmail.com**.
+Para ejercer tus derechos puedes enviarnos un correo a **marcoscalabresibaniez@gmail.com**.
 
 ## 8. Seguridad de los datos
 

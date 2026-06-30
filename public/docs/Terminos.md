@@ -52,7 +52,7 @@ El tratamiento de los datos personales se regula en nuestra [Política de Privac
 
 ## 8. Cancelación de cuenta
 
-El usuario puede solicitar en cualquier momento la baja y eliminación de sus datos escribiendo a **markbiophysicist@gmail.com**.
+El usuario puede solicitar en cualquier momento la baja y eliminación de sus datos escribiendo a **marcoscalabresibaniez@gmail.com**.
 
 react-learning-app.dev podrá dar de baja cuentas que incumplan estos Términos y Condiciones.
 
