@@ -23,6 +23,7 @@ import {
   LogIn,
   LogOut,
   UserPlus,
+  Mail,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import AuthModal from './AuthModal';
@@ -573,6 +574,17 @@ function Footer({ onNavigate }) {
               <a href="https://github.com/enaqx/awesome-react" target="_blank" rel="noopener noreferrer">Awesome React</a>
               <a href="https://stackoverflow.com/questions/tagged/reactjs" target="_blank" rel="noopener noreferrer">Stack Overflow</a>
               <a href="https://reddit.com/r/reactjs" target="_blank" rel="noopener noreferrer">Reddit r/reactjs</a>
+            </div>
+            <div className="footer-col">
+              <h2 className="footer-col-title">Contacto</h2>
+              <a href="mailto:markbiophysicist@gmail.com">
+                <Mail size={13} style={{ display: 'inline', verticalAlign: '-2px', marginRight: '0.35rem' }} />
+                markbiophysicist@gmail.com
+              </a>
+              <a href="https://github.com/kraso/react-learning-app" target="_blank" rel="noopener noreferrer">
+                <ExternalLink size={13} style={{ display: 'inline', verticalAlign: '-2px', marginRight: '0.35rem' }} />
+                GitHub del proyecto
+              </a>
             </div>
           </nav>
         </div>
