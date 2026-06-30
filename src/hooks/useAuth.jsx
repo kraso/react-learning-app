@@ -24,6 +24,19 @@ export function AuthProvider({ children }) {
         setIsRecoveringPassword(true);
         return;
       }
+      if (event === 'USER_UPDATED' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            name: session.user.user_metadata.name,
+            email: session.user.email,
+            profile: null,
+          });
+          const profile = await loadProfile(session.user.id);
+          setUser((prev) => prev ? { ...prev, profile } : prev);
+        }
+        return;
+      }
       if (session?.user) {
         const profile = await loadProfile(session.user.id);
         setUser({
