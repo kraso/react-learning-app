@@ -1037,3 +1037,13 @@ body {
     display: none;
   }
 }
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  :root {
+    --sidebar-width: 260px;
+  }
+
+  .content-area {
+    padding: 2rem;
+  }
+}

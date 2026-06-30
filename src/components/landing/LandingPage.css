@@ -76,10 +76,12 @@
   --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   background: var(--lp-bg);
   color: var(--lp-text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 .landing *,
@@ -341,6 +343,7 @@
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -491,6 +494,7 @@
   justify-content: center;
   gap: 1rem;
   margin-bottom: 3.5rem;
+  flex-wrap: wrap;
 }
 
 .btn-primary {
@@ -1103,6 +1107,13 @@
 
   .hero-actions {
     flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions .btn-primary,
+  .hero-actions .btn-ghost {
+    width: 100%;
+    justify-content: center;
   }
 
   .hero-stats {
@@ -1113,6 +1124,21 @@
   .hero-stat-divider {
     width: 40px;
     height: 1px;
+  }
+
+  .hero-orb--1 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .hero-orb--2 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .hero-orb--3 {
+    width: 180px;
+    height: 180px;
   }
 
   .stats-grid {
@@ -1145,6 +1171,10 @@
 
   .section {
     padding: 4rem 1.25rem;
+  }
+
+  .navbar {
+    padding: 0 1rem;
   }
 }
 

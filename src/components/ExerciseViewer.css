@@ -360,3 +360,66 @@
 [data-theme="light"] .ev-editor-wrapper {
   background: #f8fafc;
 }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .ev-enunciado {
+    padding: 1rem;
+  }
+
+  .ev-requisitos {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .ev-hints-toggle {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .ev-hints-list {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .ev-editor-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .ev-editor-actions {
+    width: 100%;
+  }
+
+  .ev-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .ev-line-numbers {
+    min-width: 2.2rem;
+  }
+
+  .ev-line-numbers span {
+    font-size: 0.68rem;
+    padding: 0 0.4rem;
+  }
+
+  .ev-editor {
+    min-height: 160px;
+    padding: 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .ev-editor-highlight pre {
+    padding: 0.6rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  .ev-solution-content {
+    padding: 1rem;
+  }
+}
