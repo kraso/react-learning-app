@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import AuthModal from './AuthModal';
+import ProfileModal from '../ProfileModal';
 import './LandingPage.css';
 
 const STATS_DATA = [
@@ -248,7 +249,7 @@ function StatCard({ stat, index }) {
   );
 }
 
-function Navbar({ theme, toggleTheme, onNavigate, currentView, onOpenAuth, user, onLogout }) {
+function Navbar({ theme, toggleTheme, onNavigate, currentView, onOpenAuth, user, onLogout, onOpenProfile }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -305,10 +306,14 @@ function Navbar({ theme, toggleTheme, onNavigate, currentView, onOpenAuth, user,
 
           {user ? (
             <div className="navbar-user">
-              <div className="navbar-avatar">
-                {user.name.charAt(0).toUpperCase()}
-              </div>
-              <span className="navbar-username">{user.name}</span>
+              <button className="navbar-avatar" onClick={onOpenProfile} title="Mi perfil" aria-label="Mi perfil">
+                {user.profile?.avatar_url ? (
+                  <img src={user.profile.avatar_url} alt="" className="navbar-avatar-img" />
+                ) : (
+                  user.name.charAt(0).toUpperCase()
+                )}
+              </button>
+              <span className="navbar-username">{user.profile?.display_name || user.name}</span>
               <button className="nav-link nav-link--icon" onClick={onLogout} title="Cerrar sesión">
                 <LogOut size={16} />
               </button>
@@ -587,6 +592,7 @@ export default function LandingPage({ onStartCourse, theme, toggleTheme }) {
   const { user, logout } = useAuth();
   const [currentView, setCurrentView] = useState('landing');
   const [authModal, setAuthModal] = useState({ open: false, mode: 'login' });
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const handleNavigate = (view) => {
     if (view === 'course') {
@@ -610,6 +616,7 @@ export default function LandingPage({ onStartCourse, theme, toggleTheme }) {
         onOpenAuth={openAuth}
         user={user}
         onLogout={logout}
+        onOpenProfile={() => setProfileOpen(true)}
       />
 
       {currentView === 'landing' && (
@@ -626,6 +633,7 @@ export default function LandingPage({ onStartCourse, theme, toggleTheme }) {
       <Footer onNavigate={handleNavigate} />
 
       <AuthModal isOpen={authModal.open} onClose={closeAuth} initialMode={authModal.mode} />
+      <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
     </div>
   );
 }

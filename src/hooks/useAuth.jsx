@@ -7,24 +7,38 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const loadProfile = useCallback(async (userId) => {
+    if (!userId) return null;
+    const { data } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+    return data || null;
+  }, []);
+
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
+        const profile = await loadProfile(session.user.id);
         setUser({
           id: session.user.id,
           name: session.user.user_metadata.name,
           email: session.user.email,
+          profile,
         });
       }
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
+        const profile = await loadProfile(session.user.id);
         setUser({
           id: session.user.id,
           name: session.user.user_metadata.name,
           email: session.user.email,
+          profile,
         });
       } else {
         setUser(null);
@@ -32,7 +46,21 @@ export function AuthProvider({ children }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [loadProfile]);
+
+  const updateProfile = useCallback(async (updates) => {
+    if (!user?.id) return { ok: false, error: 'No autenticado' };
+    const { error } = await supabase
+      .from('user_profiles')
+      .upsert(
+        { user_id: user.id, ...updates, updated_at: new Date().toISOString() },
+        { onConflict: 'user_id' }
+      );
+    if (error) return { ok: false, error: error.message };
+    const profile = await loadProfile(user.id);
+    setUser((prev) => prev ? { ...prev, profile } : prev);
+    return { ok: true };
+  }, [user?.id, loadProfile]);
 
   const register = useCallback(async ({ name, email, password }) => {
     const { error } = await supabase.auth.signUp({
@@ -65,7 +93,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

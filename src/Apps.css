@@ -975,6 +975,97 @@ body {
   }
 }
 
+/* ── Level Nav (right sidebar) ── */
+.level-nav {
+  width: 200px;
+  flex-shrink: 0;
+  padding: 1.25rem 0.75rem;
+  border-left: 1px solid var(--border);
+  background: var(--bg-sidebar);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+}
+
+.level-nav-title {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 0 0.5rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.25rem;
+}
+
+.level-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.5rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: left;
+  background: none;
+  border: 1px solid transparent;
+  font: inherit;
+  color: var(--text-secondary);
+}
+
+.level-nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.level-nav-item--active {
+  background: var(--accent-subtle);
+  border-color: var(--border-accent);
+  color: var(--accent);
+}
+
+.level-nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--bg-elevated);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.level-nav-item--active .level-nav-badge {
+  background: var(--accent-strong);
+  color: white;
+  border-color: transparent;
+}
+
+.level-nav-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.level-nav-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.level-nav-progress {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
 /* ── Responsive ── */
 /* ── Screen reader only ── */
 .sr-only {
@@ -1005,6 +1096,12 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+@media (max-width: 1024px) {
+  .level-nav {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {

@@ -18,6 +18,7 @@ import {
   Sun,
   LogOut,
   Home,
+  User,
 } from 'lucide-react';
 import courseData from './courseData.json';
 import { fetchMarkdownContent } from './utils/contentLoader';
@@ -26,6 +27,7 @@ import LandingPage from './components/landing/LandingPage';
 import { useTheme } from './hooks/useTheme';
 import { AuthProvider, useAuth, loadUserProgress, saveUserProgress } from './hooks/useAuth';
 import ExerciseViewer from './components/ExerciseViewer';
+import ProfileModal from './components/ProfileModal';
 
 const CATEGORIES = ['lecciones', 'ejercicios', 'pruebas'];
 
@@ -63,6 +65,7 @@ const AppsInner = () => {
   const [currentLevelName, setCurrentLevelName] = useState(Object.keys(courseData)[0]);
   const [searchTerm, setSearchTerm] = useState('');
   const [progressLoaded, setProgressLoaded] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   // Load progress when user changes
   useEffect(() => {
@@ -136,6 +139,39 @@ const AppsInner = () => {
   const isCompleted = currentFileId && completedItems.includes(currentFileId);
   const currentLevelTitle = courseData[currentLevelName]?.title ?? '';
 
+  const scrollToLevel = (levelName) => {
+    const el = document.getElementById(`level-${levelName}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setCurrentLevelName(levelName);
+    }
+  };
+
+  const LevelNav = () => (
+    <nav className="level-nav" aria-label="Navegación de niveles">
+      <div className="level-nav-title">Niveles</div>
+      {Object.entries(courseData).map(([levelName, levelData]) => {
+        const isActive = levelName === currentLevelName;
+        const completed = levelData.lecciones.filter((l) => completedItems.includes(l.id)).length;
+        const total = levelData.lecciones.length;
+        return (
+          <button
+            key={levelName}
+            className={`level-nav-item ${isActive ? 'level-nav-item--active' : ''}`}
+            onClick={() => scrollToLevel(levelName)}
+            aria-current={isActive ? 'true' : undefined}
+          >
+            <span className="level-nav-badge">{LEVEL_NUMBERS[levelName]}</span>
+            <div className="level-nav-info">
+              <span className="level-nav-name">{levelData.title}</span>
+              <span className="level-nav-progress">{completed}/{total} lecciones</span>
+            </div>
+          </button>
+        );
+      })}
+    </nav>
+  );
+
   const Sidebar = ({ onBackToLanding }) => (
     <aside className="sidebar">
       <button className="back-to-landing" onClick={onBackToLanding}>
@@ -168,7 +204,7 @@ const AppsInner = () => {
         const isCurrentLevel = levelName === currentLevelName;
 
         return (
-          <div key={levelName} className={`level-section ${isCurrentLevel ? 'active' : ''}`}>
+          <div key={levelName} id={`level-${levelName}`} className={`level-section ${isCurrentLevel ? 'active' : ''}`}>
             <div className="level-header">
               <h2 className="level-title">
                 <span className="level-badge">{LEVEL_NUMBERS[levelName]}</span>
@@ -380,6 +416,10 @@ const AppsInner = () => {
                     </div>
                   </div>
                   <div className="course-nav-dropdown-divider" />
+                  <button className="course-nav-dropdown-item" onClick={() => { setMenuOpen(false); setProfileOpen(true); }}>
+                    <User size={15} />
+                    Mi Perfil
+                  </button>
                   <button className="course-nav-dropdown-item" onClick={() => { setMenuOpen(false); logout(); }}>
                     <LogOut size={15} />
                     Cerrar sesión
@@ -415,7 +455,9 @@ const AppsInner = () => {
         <main className="content-panel">
           <ContentViewer />
         </main>
+        <LevelNav />
       </div>
+      <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
     </div>
   );
 };
