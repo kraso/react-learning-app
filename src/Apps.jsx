@@ -87,6 +87,13 @@ const AppsInner = () => {
     if (firstLesson) setCurrentFile(firstLesson.path);
   }, []);
 
+  // Auto-enter course when user authenticates from landing
+  useEffect(() => {
+    if (!authLoading && user && currentView === 'landing') {
+      setCurrentView('course');
+    }
+  }, [user, authLoading]);
+
   useEffect(() => {
     if (currentFile) {
       const loadContent = async () => {
