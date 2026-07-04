@@ -311,10 +311,10 @@ function Navbar({ theme, toggleTheme, onNavigate, currentView, onOpenAuth, user,
                 {user.profile?.avatar_url ? (
                   <img src={user.profile.avatar_url} alt="" className="navbar-avatar-img" />
                 ) : (
-                  user.name.charAt(0).toUpperCase()
+                  user.name?.charAt(0)?.toUpperCase() || '?'
                 )}
               </button>
-              <span className="navbar-username">{user.profile?.display_name || user.name}</span>
+              <span className="navbar-username">{user.profile?.display_name || user.name || user.email || 'Usuario'}</span>
               <button className="nav-link nav-link--icon" onClick={onLogout} title="Cerrar sesión">
                 <LogOut size={16} />
               </button>
