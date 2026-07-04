@@ -428,7 +428,13 @@ const AppsInner = () => {
                 aria-expanded={menuOpen}
                 aria-haspopup="true"
               >
-                <div className="course-nav-avatar">{user.name?.charAt(0)?.toUpperCase() || '?'}</div>
+                <div className="course-nav-avatar">
+                  {user.profile?.avatar_url ? (
+                    <img src={user.profile.avatar_url} alt="" className="course-nav-avatar-img" />
+                  ) : (
+                    user.name?.charAt(0)?.toUpperCase() || '?'
+                  )}
+                </div>
                 <span className="course-nav-username">{user.name || user.email || 'Usuario'}</span>
                 <svg className={`course-nav-chevron ${menuOpen ? 'open' : ''}`} width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                   <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -437,7 +443,13 @@ const AppsInner = () => {
               {menuOpen && (
                 <div className="course-nav-dropdown">
                   <div className="course-nav-dropdown-header">
-                    <div className="course-nav-dropdown-avatar">{user.name?.charAt(0)?.toUpperCase() || '?'}</div>
+                    <div className="course-nav-dropdown-avatar">
+                      {user.profile?.avatar_url ? (
+                        <img src={user.profile.avatar_url} alt="" className="course-nav-avatar-img" />
+                      ) : (
+                        user.name?.charAt(0)?.toUpperCase() || '?'
+                      )}
+                    </div>
                     <div>
                       <div className="course-nav-dropdown-name">{user.name || 'Usuario'}</div>
                       <div className="course-nav-dropdown-email">{user.email || ''}</div>
