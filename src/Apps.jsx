@@ -87,9 +87,11 @@ const AppsInner = () => {
     if (firstLesson) setCurrentFile(firstLesson.path);
   }, []);
 
-  // Auto-enter course when user authenticates from landing
+  // Auto-enter course when user authenticates from landing (only once)
+  const hasAutoEnteredRef = useRef(false);
   useEffect(() => {
-    if (!authLoading && user && currentView === 'landing') {
+    if (!authLoading && user && currentView === 'landing' && !hasAutoEnteredRef.current) {
+      hasAutoEnteredRef.current = true;
       setCurrentView('course');
     }
   }, [user, authLoading]);
