@@ -182,21 +182,51 @@ export function useAuth() {
 export async function loadUserProgress(userId) {
   if (!userId) return [];
   const { data, error } = await supabase
-    .from('user_progress')
-    .select('completed_items')
+    .from('progreso_usuario')
+    .select('leccion_id')
     .eq('user_id', userId)
-    .maybeSingle();
+    .eq('app_id', 'react');
   if (error || !data) return [];
-  return data.completed_items || [];
+  return data.map((r) => r.leccion_id);
 }
 
 export async function saveUserProgress(userId, completedItems) {
   if (!userId) return;
-  const { error } = await supabase
-    .from('user_progress')
-    .upsert(
-      { user_id: userId, completed_items: completedItems, updated_at: new Date().toISOString() },
-      { onConflict: 'user_id' }
-    );
-  if (error) console.error('Error saving progress:', error);
+
+  // First, get existing items
+  const { data: existing } = await supabase
+    .from('progreso_usuario')
+    .select('leccion_id')
+    .eq('user_id', userId)
+    .eq('app_id', 'react');
+
+  const existingIds = new Set((existing || []).map((r) => r.leccion_id));
+
+  // Insert new items only
+  const newItems = completedItems.filter((id) => !existingIds.has(id));
+  if (newItems.length > 0) {
+    const rows = newItems.map((leccionId) => ({
+      user_id: userId,
+      app_id: 'react',
+      leccion_id: leccionId,
+      insignias: [],
+      puntos: 5,
+    }));
+    const { error } = await supabase
+      .from('progreso_usuario')
+      .upsert(rows, { onConflict: 'user_id,app_id,leccion_id' });
+    if (error) console.error('Error saving progress:', error);
+  }
+
+  // Delete items that are no longer completed
+  const toDelete = (existing || []).filter((r) => !completedItems.includes(r.leccion_id));
+  if (toDelete.length > 0) {
+    const { error } = await supabase
+      .from('progreso_usuario')
+      .delete()
+      .eq('user_id', userId)
+      .eq('app_id', 'react')
+      .in('leccion_id', toDelete.map((r) => r.leccion_id));
+    if (error) console.error('Error deleting progress:', error);
+  }
 }
