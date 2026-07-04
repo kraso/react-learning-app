@@ -586,6 +586,17 @@ function Footer({ onNavigate, onGoToLegal }) {
                 GitHub del proyecto
               </a>
             </div>
+            <div className="footer-col">
+              <h2 className="footer-col-title">Proyectos</h2>
+              <a href="https://javascript-learning-app.dev" target="_blank" rel="noopener noreferrer">
+                <img src="https://javascript-learning-app.dev/favicon.svg" alt="JavaScript" style={{ display: 'inline', verticalAlign: '-3px', width: '16px', height: '16px', marginRight: '0.35rem', borderRadius: '3px' }} />
+                Curso JavaScript
+              </a>
+              <a href="https://typescript.javascript-learning-app.dev" target="_blank" rel="noopener noreferrer">
+                <img src="https://typescript.javascript-learning-app.dev/favicon.ico" alt="TypeScript" style={{ display: 'inline', verticalAlign: '-3px', width: '16px', height: '16px', marginRight: '0.35rem', borderRadius: '3px' }} />
+                Curso TypeScript
+              </a>
+            </div>
           </nav>
         </div>
         <div className="footer-bottom">
