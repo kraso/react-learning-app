@@ -90,10 +90,15 @@ export function AuthProvider({ children }) {
         { onConflict: 'user_id' }
       );
     if (error) return { ok: false, error: error.message };
+
+    await supabase.auth.updateUser({
+      data: { name: updates.display_name || user.name, phone: updates.phone || '' },
+    });
+
     const profile = await loadProfile(user.id);
     setUser((prev) => prev ? { ...prev, profile } : prev);
     return { ok: true };
-  }, [user?.id, loadProfile]);
+  }, [user?.id, user?.name, loadProfile]);
 
   const register = useCallback(async ({ name, email, password }) => {
     const { error } = await supabase.auth.signUp({
