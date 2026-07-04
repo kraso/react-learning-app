@@ -19,6 +19,21 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tokenHash = params.get('token_hash');
+    const type = params.get('type');
+
+    if (tokenHash && (type === 'confirmation' || type === 'signup')) {
+      supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'signup' }).then(({ error }) => {
+        if (error) {
+          console.error('Email verification error:', error.message);
+        }
+        window.history.replaceState({}, '', window.location.pathname);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'PASSWORD_RECOVERY') {
         setIsRecoveringPassword(true);
