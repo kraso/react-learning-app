@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
         if (session?.user) {
           setUser({
             id: session.user.id,
-            name: session.user.user_metadata.name,
+            name: session.user.user_metadata.full_name || session.user.user_metadata.name,
             email: session.user.email,
             profile: null,
           });
@@ -56,7 +56,7 @@ export function AuthProvider({ children }) {
         const profile = await loadProfile(session.user.id);
         setUser({
           id: session.user.id,
-          name: session.user.user_metadata.name,
+          name: session.user.user_metadata.full_name || session.user.user_metadata.name,
           email: session.user.email,
           profile,
         });
@@ -70,7 +70,7 @@ export function AuthProvider({ children }) {
         const profile = await loadProfile(session.user.id);
         setUser({
           id: session.user.id,
-          name: session.user.user_metadata.name,
+          name: session.user.user_metadata.full_name || session.user.user_metadata.name,
           email: session.user.email,
           profile,
         });
@@ -92,7 +92,7 @@ export function AuthProvider({ children }) {
     if (error) return { ok: false, error: error.message };
 
     await supabase.auth.updateUser({
-      data: { name: updates.display_name || user.name, phone: updates.phone || '' },
+      data: { full_name: updates.display_name || user.name, alias: updates.alias || '', phone: updates.phone || '' },
     });
 
     const profile = await loadProfile(user.id);
@@ -104,7 +104,7 @@ export function AuthProvider({ children }) {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name }, redirectTo: window.location.origin + '/' },
+      options: { data: { full_name: name }, redirectTo: window.location.origin + '/' },
     });
     if (error) {
       const msg = error.message === 'User already registered'
@@ -176,7 +176,7 @@ export function AuthProvider({ children }) {
       const profile = await loadProfile(data.user.id);
       const updatedUser = {
         id: data.user.id,
-        name: data.user.user_metadata.name,
+        name: data.user.user_metadata.full_name || data.user.user_metadata.name,
         email: data.user.email,
         profile,
       };
