@@ -84,7 +84,7 @@ export function AuthProvider({ children }) {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name } },
+      options: { data: { name }, redirectTo: window.location.origin + '/' },
     });
     if (error) {
       const msg = error.message === 'User already registered'
