@@ -186,8 +186,23 @@ export function AuthProvider({ children }) {
     return null;
   }, [loadProfile]);
 
+  const signInWithOAuth = useCallback(async (provider) => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+      if (error) return { ok: false, error: error.message };
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: err.message || 'Error al iniciar sesión con ' + provider };
+    }
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile, resetPassword, updatePassword, updateEmail, isRecoveringPassword, setIsRecoveringPassword, refreshUser }}>
+    <AuthContext.Provider value={{ user, register, login, logout, loading, updateProfile, resetPassword, updatePassword, updateEmail, isRecoveringPassword, setIsRecoveringPassword, refreshUser, signInWithOAuth }}>
       {children}
     </AuthContext.Provider>
   );
