@@ -28,6 +28,7 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 import AuthModal from './AuthModal';
 import ProfileModal from '../ProfileModal';
+import CourseBundleBanner from './CourseBundleBanner';
 import './LandingPage.css';
 
 const STATS_DATA = [
@@ -648,6 +649,7 @@ export default function LandingPage({ onStartCourse, theme, toggleTheme, onGoToL
 
       {currentView === 'landing' && (
         <>
+          <CourseBundleBanner currentCourse="react" />
           <HeroSection onStart={onStartCourse} onOpenAuth={openAuth} user={user} />
           <DocumentationSection />
           <CoursesSection />
