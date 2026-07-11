@@ -474,6 +474,18 @@ const AppsInner = () => {
                     <User size={15} />
                     Mi Perfil
                   </button>
+                  <div className="course-nav-dropdown-divider" />
+                  <div className="course-nav-dropdown-label">Mis Cursos</div>
+                  <a href="https://javascript-learning-app.dev" className="course-nav-dropdown-link" target="_blank" rel="noopener noreferrer">
+                    JavaScript
+                  </a>
+                  <a href="https://react-learning-app.dev" className="course-nav-dropdown-link">
+                    React
+                  </a>
+                  <a href="https://typescript.javascript-learning-app.dev" className="course-nav-dropdown-link" target="_blank" rel="noopener noreferrer">
+                    TypeScript
+                  </a>
+                  <div className="course-nav-dropdown-divider" />
                   <button className="course-nav-dropdown-item" onClick={() => { setMenuOpen(false); logout(); }}>
                     <LogOut size={15} />
                     Cerrar sesión

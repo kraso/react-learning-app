@@ -347,6 +347,37 @@ body {
   margin: 0;
 }
 
+.course-nav-dropdown-label {
+  padding: 0.4rem 0.875rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.course-nav-dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.65rem 0.875rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: left;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+}
+
+.course-nav-dropdown-link:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
 .course-nav-dropdown-item {
   display: flex;
   align-items: center;
