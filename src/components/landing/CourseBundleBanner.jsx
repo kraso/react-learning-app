@@ -22,7 +22,7 @@ const COURSES = [
     id: 'ts',
     name: 'TypeScript',
     url: 'https://typescript.javascript-learning-app.dev/curso',
-    image: 'https://typescript.javascript-learning-app.dev/og-image.svg',
+    image: 'https://typescript.javascript-learning-app.dev/og-image.png',
     color: 'from-sky-500 to-cyan-400',
   },
 ];
