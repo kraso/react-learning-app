@@ -58,10 +58,11 @@ const getLevelKeyFromPath = (path) =>
   Object.keys(courseData).find((key) => path.includes(key));
 
 const AppsInner = () => {
-  // Handle OAuth callback on any route (hash-based auth from Supabase)
-  const hasAuthHash = window.location.hash.includes('access_token') || 
-                      window.location.hash.includes('refresh_token');
-  if (hasAuthHash) {
+  // Handle OAuth callback route
+  const isCallbackRoute = window.location.pathname === '/auth/callback' || 
+                          window.location.hash.includes('access_token') || 
+                          window.location.hash.includes('refresh_token');
+  if (isCallbackRoute) {
     return <OAuthCallback />;
   }
 
