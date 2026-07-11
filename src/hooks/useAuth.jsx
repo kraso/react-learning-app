@@ -168,6 +168,7 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut();
+    window.location.href = '/';
   }, []);
 
   const refreshUser = useCallback(async () => {
