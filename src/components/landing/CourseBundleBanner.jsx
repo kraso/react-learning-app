@@ -45,7 +45,7 @@ export default function CourseBundleBanner({ currentCourse = 'react' }) {
       <div style={{
         maxWidth: '72rem',
         margin: '0 auto',
-        padding: '2.5rem 1rem',
+        padding: '3.5rem 1rem 2.5rem',
       }}>
         <p style={{
           textAlign: 'center',
