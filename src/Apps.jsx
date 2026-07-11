@@ -26,6 +26,8 @@ import ProgressBar from './components/ProgressBar';
 import LandingPage from './components/landing/LandingPage';
 import { useTheme } from './hooks/useTheme';
 import { AuthProvider, useAuth, loadUserProgress, saveUserProgress } from './hooks/useAuth';
+import { getAuthRedirectUrl } from './lib/auth-bridge';
+import { supabase } from './lib/supabase';
 import ExerciseViewer from './components/ExerciseViewer';
 import ProfileModal from './components/ProfileModal';
 import ResetPasswordModal from './components/ResetPasswordModal';
@@ -476,15 +478,33 @@ const AppsInner = () => {
                   </button>
                   <div className="course-nav-dropdown-divider" />
                   <div className="course-nav-dropdown-label">Mis Cursos</div>
-                  <a href="https://javascript-learning-app.dev/curso" className="course-nav-dropdown-link" target="_blank" rel="noopener noreferrer">
+                  <button
+                    className="course-nav-dropdown-link"
+                    onClick={async () => {
+                      const url = await getAuthRedirectUrl(supabase, 'https://javascript-learning-app.dev/curso');
+                      window.location.href = url;
+                    }}
+                  >
                     JavaScript
-                  </a>
-                  <a href="https://react-learning-app.dev" className="course-nav-dropdown-link">
+                  </button>
+                  <button
+                    className="course-nav-dropdown-link"
+                    onClick={async () => {
+                      const url = await getAuthRedirectUrl(supabase, 'https://react-learning-app.dev');
+                      window.location.href = url;
+                    }}
+                  >
                     React
-                  </a>
-                  <a href="https://typescript.javascript-learning-app.dev/curso" className="course-nav-dropdown-link" target="_blank" rel="noopener noreferrer">
+                  </button>
+                  <button
+                    className="course-nav-dropdown-link"
+                    onClick={async () => {
+                      const url = await getAuthRedirectUrl(supabase, 'https://typescript.javascript-learning-app.dev/curso');
+                      window.location.href = url;
+                    }}
+                  >
                     TypeScript
-                  </a>
+                  </button>
                   <div className="course-nav-dropdown-divider" />
                   <button className="course-nav-dropdown-item" onClick={() => { setMenuOpen(false); logout(); }}>
                     <LogOut size={15} />

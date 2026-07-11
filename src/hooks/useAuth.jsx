@@ -32,14 +32,13 @@ export function AuthProvider({ children }) {
       });
     }
 
-    // Handle OAuth callback on root path
+    // Handle OAuth callback or cross-domain session transfer
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    if (hashParams.has('access_token') || hashParams.has('refresh_token')) {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-          // Session established via hash, clean URL
-          window.history.replaceState({}, '', window.location.pathname);
-        }
+    const access_token = hashParams.get('access_token');
+    const refresh_token = hashParams.get('refresh_token');
+    if (access_token && refresh_token) {
+      supabase.auth.setSession({ access_token, refresh_token }).then(() => {
+        window.history.replaceState({}, '', window.location.pathname);
       });
     }
   }, []);
