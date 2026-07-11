@@ -31,16 +31,6 @@ export function AuthProvider({ children }) {
         window.history.replaceState({}, '', window.location.pathname);
       });
     }
-
-    // Handle OAuth callback or cross-domain session transfer
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const access_token = hashParams.get('access_token');
-    const refresh_token = hashParams.get('refresh_token');
-    if (access_token && refresh_token) {
-      supabase.auth.setSession({ access_token, refresh_token }).then(() => {
-        window.history.replaceState({}, '', window.location.pathname);
-      });
-    }
   }, []);
 
   useEffect(() => {
@@ -88,7 +78,26 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    const handleSessionSet = (e) => {
+      const sessionUser = e.detail?.user;
+      if (sessionUser) {
+        loadProfile(sessionUser.id).then((profile) => {
+          setUser({
+            id: sessionUser.id,
+            name: sessionUser.user_metadata?.full_name || sessionUser.user_metadata?.name,
+            email: sessionUser.email,
+            profile,
+          });
+        });
+      }
+      setLoading(false);
+    };
+    window.addEventListener('supabase:session-set', handleSessionSet);
+
+    return () => {
+      subscription.unsubscribe();
+      window.removeEventListener('supabase:session-set', handleSessionSet);
+    };
   }, [loadProfile]);
 
   const updateProfile = useCallback(async (updates) => {
