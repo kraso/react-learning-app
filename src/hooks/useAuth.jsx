@@ -189,11 +189,12 @@ export function AuthProvider({ children }) {
 
   const signInWithOAuth = useCallback(async (provider) => {
     try {
+      const redirectTo = typeof window !== "undefined"
+        ? `${window.location.origin}/`
+        : "https://react-learning-app.dev/";
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: {
-          redirectTo: `${window.location.origin}/`,
-        },
+        options: { redirectTo },
       });
       if (error) return { ok: false, error: error.message };
       return { ok: true };
