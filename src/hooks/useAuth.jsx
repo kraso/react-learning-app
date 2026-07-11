@@ -31,6 +31,17 @@ export function AuthProvider({ children }) {
         window.history.replaceState({}, '', window.location.pathname);
       });
     }
+
+    // Handle OAuth callback on root path
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    if (hashParams.has('access_token') || hashParams.has('refresh_token')) {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+          // Session established via hash, clean URL
+          window.history.replaceState({}, '', window.location.pathname);
+        }
+      });
+    }
   }, []);
 
   useEffect(() => {

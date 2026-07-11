@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/((?!assets/|docs/|favicon.svg|icons.svg|promo-video.mp4).*)", "destination": "/index.html" }
+    { "source": "/auth/callback", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
