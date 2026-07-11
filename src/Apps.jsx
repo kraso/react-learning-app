@@ -30,6 +30,7 @@ import ExerciseViewer from './components/ExerciseViewer';
 import ProfileModal from './components/ProfileModal';
 import ResetPasswordModal from './components/ResetPasswordModal';
 import LegalPage from './components/LegalPage';
+import OAuthCallback from './components/OAuthCallback';
 
 const CATEGORIES = ['lecciones', 'ejercicios', 'pruebas'];
 
@@ -57,6 +58,12 @@ const getLevelKeyFromPath = (path) =>
   Object.keys(courseData).find((key) => path.includes(key));
 
 const AppsInner = () => {
+  // Handle OAuth callback route
+  const isCallbackRoute = window.location.pathname === '/auth/callback' || window.location.hash.includes('access_token');
+  if (isCallbackRoute) {
+    return <OAuthCallback />;
+  }
+
   const { theme, toggleTheme } = useTheme();
   const { user, logout, loading: authLoading, isRecoveringPassword } = useAuth();
   const [currentView, setCurrentView] = useState('landing');
