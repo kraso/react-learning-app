@@ -66,7 +66,10 @@ const AppsInner = () => {
 
   const { theme, toggleTheme } = useTheme();
   const { user, logout, loading: authLoading, isRecoveringPassword } = useAuth();
-  const [currentView, setCurrentView] = useState('landing');
+  
+  // Check URL for /curso path
+  const isCourseRoute = window.location.pathname === '/curso';
+  const [currentView, setCurrentView] = useState(isCourseRoute ? 'course' : 'landing');
   const [currentFile, setCurrentFile] = useState(null);
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
