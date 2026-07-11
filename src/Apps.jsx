@@ -476,13 +476,13 @@ const AppsInner = () => {
                   </button>
                   <div className="course-nav-dropdown-divider" />
                   <div className="course-nav-dropdown-label">Mis Cursos</div>
-                  <a href="https://javascript-learning-app.dev" className="course-nav-dropdown-link" target="_blank" rel="noopener noreferrer">
+                  <a href="https://javascript-learning-app.dev/curso" className="course-nav-dropdown-link" target="_blank" rel="noopener noreferrer">
                     JavaScript
                   </a>
                   <a href="https://react-learning-app.dev" className="course-nav-dropdown-link">
                     React
                   </a>
-                  <a href="https://typescript.javascript-learning-app.dev" className="course-nav-dropdown-link" target="_blank" rel="noopener noreferrer">
+                  <a href="https://typescript.javascript-learning-app.dev/curso" className="course-nav-dropdown-link" target="_blank" rel="noopener noreferrer">
                     TypeScript
                   </a>
                   <div className="course-nav-dropdown-divider" />
